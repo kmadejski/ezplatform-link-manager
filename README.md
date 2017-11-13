@@ -1,0 +1,1 @@
+# ezplatform-link-manager
