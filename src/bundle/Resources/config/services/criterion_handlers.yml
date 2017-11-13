@@ -1,0 +1,55 @@
+parameters:
+    ezpublish.legacy.gateway.criterion_handler.url.logical_and.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalAnd
+    ezpublish.legacy.gateway.criterion_handler.url.logical_not.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalNot
+    ezpublish.legacy.gateway.criterion_handler.url.logical_or.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\LogicalOr
+    ezpublish.legacy.gateway.criterion_handler.url.match_all.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchAll
+    ezpublish.legacy.gateway.criterion_handler.url.match_none.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchNone
+    ezpublish.legacy.gateway.criterion_handler.url.validity.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\Validity
+    ezpublish.legacy.gateway.criterion_handler.url.pattern.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\Pattern
+
+services:
+    ezpublish.legacy.gateway.criterion_handler.url.base:
+        abstract: true
+        arguments: ['@ezpublish.api.storage_engine.legacy.dbhandler']
+
+    ezpublish.legacy.gateway.criterion_handler.url.logical_and:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.logical_and.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.logical_or:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.logical_or.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.logical_not:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.logical_not.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.match_all:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.match_all.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.match_none:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.match_none.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.validity:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.validity.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.pattern:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.pattern.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }

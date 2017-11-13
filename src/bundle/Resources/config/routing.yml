@@ -1,0 +1,18 @@
+admin_link_manager_list:
+    path: /pjax/link-management
+    defaults:
+        _controller: ezsystems.platformui.controller.link_management:listAction
+
+admin_link_manager_edit:
+    path: /pjax/link-management/edit/{urlId}
+    defaults:
+        _controller: ezsystems.platformui.controller.link_management:editAction
+    requirements:
+        urlId: \d+
+
+admin_link_manager_view:
+    path: /pjax/link-management/view/{urlId}
+    defaults:
+        _controller: ezsystems.platformui.controller.link_management:viewAction
+    requirements:
+        urlId: \d+

@@ -1,0 +1,52 @@
+{% extends 'eZPlatformUIBundle::pjax_admin.html.twig' %}
+
+{% trans_default_domain "linkmanager" %}
+
+{%- block header_breadcrumbs -%}
+    {% set breadcrumb_items = [
+        { link: path('admin_dashboard'), label: 'dashboard.title'|trans({}, 'dashboard') },
+        { link: path('admin_link_manager_list'), label: 'url.list'|trans() },
+        { link: '', label: 'url.edit'|trans }
+    ] %}
+
+    {{ parent() }}
+{%- endblock -%}
+
+{%- block header_title -%}
+    <h1 class="ez-page-header-name">
+        {{ 'url.edit'|trans }}
+    </h1>
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="ez-serverside-content">
+        {{ form_start(form, {"attr": {"class": "pure-form pure-form-aligned"}}) }}
+            {{ form_errors(form) }}
+
+            <fieldset>
+                <div class="pure-control-group">
+                    {{ form_label(form.url) }}
+                    {{ form_errors(form.url) }}
+                    {{ form_widget(form.url) }}
+                </div>
+            </fieldset>
+
+            <div class="pure-controls">
+                <a href="{{ path('admin_link_manager_list') }}" class="pure-button ez-button">
+                    Cancel
+                </a>
+
+                <button class="pure-button ez-button">Save</button>
+            </div>
+        {{ form_end(form) }}
+    </section>
+{%- endblock -%}
+
+{% block title %}{{ 'url.edit'|trans }}{% endblock %}
+
+{% block notification %}
+    {% if not form.vars.valid %}
+        <li data-state="error">{{ "form.validation_error"|trans(domain="messages") }}</li>
+    {% endif %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "eZPlatformUIBundle::pjax_admin.html.twig" %}
+
+{% trans_default_domain "linkmanager" %}
+
+{%- block header_breadcrumbs -%}
+    {% set breadcrumb_items = [
+        { link: path('admin_dashboard'), label: 'dashboard.title'|trans({}, 'dashboard') },
+        { link: null, label: 'url.list'|trans },
+    ] %}
+
+    {{ parent() }}
+{%- endblock -%}
+
+{%- block header_title -%}
+    <h1 class="ez-page-header-name">{{ 'url.list'|trans }}</h1>
+{%- endblock -%}
+
+{%- block content -%}
+    <section class="ez-serverside-content">
+        <div class="ez-table-data is-flexible">
+            <div class="ez-table-data-container">
+                {{ form_start(form, {"attr": {"class": "pure-form pure-form-aligned"}}) }}
+                    <fieldset>
+                        {{ form_widget(form.searchQuery, { attr: {
+                            'placeholder': 'url.search.placeholder'|trans,
+                            'class': ''
+                        }}) }}
+
+                        {{ form_label(form.status) }}
+                        {{ form_widget(form.status) }}
+                        <button class="pure-button ez-button">
+                            {{ 'url.search'|trans }}
+                        </button>
+                    </fieldset>
+
+                    {{ form_widget(form.page, { attr: { value: '1' }}) }}
+                {{ form_end(form) }}
+
+                <table class="pure-table pure-table-striped ez-selection-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'url.label.address'|trans }}</th>
+                            <th>{{ 'url.label.status'|trans }}</th>
+                            <th>{{ 'url.label.last_checked'|trans }}</th>
+                            <th>{{ 'url.label.modified'|trans }}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for url in urls %}
+                        {% set edit_url = path('admin_link_manager_edit', {urlId: url.id}) %}
+                        {% set view_url = path('admin_link_manager_view', {urlId: url.id}) %}
+                        <tr>
+                            <td>
+                                <a href="{{ view_url }}">{{ url.url }}</a>
+                                (<a href="{{ url.url }}" target="_blank">{{ 'url.open'|trans }}</a>)
+                            </td>
+                            <td>{{ url.isValid ? 'url.status.valid'|trans : 'url.status.invalid'|trans }}</td>
+                            <td>
+                                {% if url.lastChecked %}
+                                    {{ url.lastChecked | date('Y-m-d H:i') }}
+                                {% else %}
+                                    Never
+                                {% endif %}
+                            </td>
+                            <td>{{ url.modified | date('Y-m-d H:i') }}</td>
+                            <td>
+                                {% if can_edit %}
+                                    <a href="{{ edit_url }}" class="pure-button ez-button" data-icon="&#xe606;">
+                                        {{ 'url.edit'|trans }}
+                                    </a>
+                                {% else %}
+                                    <span class="pure-button ez-button pure-button-disabled" data-icon="&#xe606;">
+                                        {{ 'url.edit'|trans }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <p>{{ pagerfanta(urls) }}</p>
+            </div>
+        </div>
+    </section>
+{%- endblock -%}
+
+{% block title %}{{ 'url.list'|trans }}{% endblock %}
+
