@@ -6,6 +6,7 @@ parameters:
     ezpublish.api.service.url.signalslot.class: 'EzSystems\EzPlatformLinkManager\Core\SignalSlot\URLService'
     ezpublish.persistence.legacy.url.gateway.inner.class: 'EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway\DoctrineDatabase'
     ezpublish.persistence.legacy.url.mapper.class: 'EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Mapper'
+    ezpublish.spi.persistence.cache.url.handler.class: 'EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler'
     ezpublish.spi.persistence.legacy.url.handler.class: 'EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Handler'
     ezpublish.spi.persistence.legacy.url.criterion_converter.class: 'EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriteriaConverter'
     ezsystems.platformui.controller.link_management.class: 'EzSystems\EzPlatformLinkManagerBundle\Controller\LinkManagerController'
@@ -26,7 +27,7 @@ services:
         class: '%ezpublish.api.service.url_inner.class%'
         arguments:
             - '@ezpublish.api.repository'
-            - '@ezpublish.spi.persistence.legacy.url.handler'
+            - '@ezpublish.spi.persistence.cache.url.handler'
         lazy: true
 
     ezpublish.persistence.legacy.url.gateway.inner:
@@ -43,6 +44,13 @@ services:
 
     ezpublish.spi.persistence.legacy.url.criterion_converter:
         class: '%ezpublish.spi.persistence.legacy.url.criterion_converter.class%'
+
+    ezpublish.spi.persistence.cache.url.handler:
+        class: '%ezpublish.spi.persistence.cache.url.handler.class%'
+        arguments:
+            - '@ezpublish.cache_pool.spi.cache.decorator'
+            - '@ezpublish.spi.persistence.legacy.url.handler'
+            - '@ezpublish.spi.persistence.cache.persistenceLogger'
 
     ezpublish.spi.persistence.legacy.url.handler:
         class: '%ezpublish.spi.persistence.legacy.url.handler.class%'
