@@ -1,6 +1,6 @@
 {
   "name": "ezsystems/ezplatform-link-manager",
-  "type": "bundle",
+  "type": "ezplatform-bundle",
   "description": "Links management for eZ Platform",
   "keywords": [],
   "license": "GPL-2.0",
