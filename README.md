@@ -2,6 +2,8 @@
 
 This package provides prototype of Public API and UI for links management in eZ Platform.
 
+_NOTE: This bundle is currently only integrating with eZ Platform UI 1.x, integration with 2.x is planned._
+
 ## Features
 
 * UI for an overview of all URLs with pagination and filtering
@@ -11,17 +13,7 @@ This package provides prototype of Public API and UI for links management in eZ 
 
 ## Installation
 
-1. Add the following repository to `composer.json`:
-```json
-"repositories": [
-    {
-        "type":"vcs",
-        "url":"https://github.com/ezsystems/ezplatform-link-manager.git"
-    }
-]
-```
-
-2. Enable the bundle in the kernel:
+1. Enable the bundle in the kernel:
 
 ```php
 <?php
@@ -39,7 +31,7 @@ public function registerBundles()
 }
 ```
 
-3. Import routing files 
+2. Import routing files 
 
 ```yaml
 # app/config/routing.yml
@@ -48,9 +40,9 @@ _linkManager:
     resource: '@EzPlatformLinkManagerBundle/Resources/config/routing.yml'
 ```
 
-4. Require the bundle with composer 
+3. Require the bundle with composer 
 ```shell
-composer require "ezsystems/ezplatform-link-manager" "dev-master"
+composer require ezsystems/ezplatform-link-manager:dev-master
 ```
 
 4. Done. You should be able to see "Link management" menu item under the `Admin` tab your administration panel.
