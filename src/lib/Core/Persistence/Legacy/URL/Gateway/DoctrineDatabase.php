@@ -67,7 +67,7 @@ class DoctrineDatabase extends Gateway
 
         $query = $this->createSelectQuery();
         $query->where($this->criteriaConverter->convertCriteria($query, $criterion));
-        $query->limit($limit, $offset);
+        $query->limit($limit > 0 ? $limit : PHP_INT_MAX, $offset);
 
         $statement = $query->prepare();
         $statement->execute();
