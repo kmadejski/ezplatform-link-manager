@@ -49,25 +49,25 @@ class URLHandler implements URLHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createUrl(URLCreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, [
-            'struct' => $struct
+            'struct' => $struct,
         ]);
 
         return $this->persistenceHandler->createUrl($struct);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function updateUrl($id, URLUpdateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, [
             'url' => $id,
-            'struct' => $struct
+            'struct' => $struct,
         ]);
 
         $url = $this->persistenceHandler->updateUrl($id, $struct);
@@ -80,21 +80,21 @@ class URLHandler implements URLHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function find(Criterion $criterion, $offset = 0, $limit = -1)
     {
         $this->logger->logCall(__METHOD__, [
             'criteria' => $criterion,
             'offset' => $offset,
-            'limit' => $limit
+            'limit' => $limit,
         ]);
 
         return $this->persistenceHandler->find($criterion, $offset, $limit);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function load($id)
     {
@@ -111,7 +111,7 @@ class URLHandler implements URLHandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRelatedContentIds($id)
     {

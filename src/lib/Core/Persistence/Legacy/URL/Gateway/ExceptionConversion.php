@@ -29,7 +29,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function insertUrl(URL $url)
     {
@@ -43,7 +43,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function updateUrl(URL $url)
     {
@@ -57,7 +57,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function find(Criterion $criterion, $offset, $limit, $doCount = true)
     {
@@ -71,7 +71,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function loadUrlData($id)
     {
@@ -85,7 +85,7 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRelatedContentIds($id)
     {

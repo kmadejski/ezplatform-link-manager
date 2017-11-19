@@ -38,7 +38,7 @@ class URLService implements URLServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function createUpdateStruct()
     {
@@ -46,7 +46,7 @@ class URLService implements URLServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function findUrls(Criterion $criteria, $offset = 0, $limit = -1)
     {
@@ -54,7 +54,7 @@ class URLService implements URLServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1)
     {
@@ -62,7 +62,7 @@ class URLService implements URLServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function loadUrl($id)
     {
@@ -70,7 +70,7 @@ class URLService implements URLServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function updateUrl(URL $url, URLUpdateStruct $struct)
     {
@@ -78,7 +78,7 @@ class URLService implements URLServiceInterface
 
         $this->signalDispatcher->emit(
             new UpdateUrlSignal([
-                'urlId' => $returnValue->id
+                'urlId' => $returnValue->id,
             ])
         );
 
