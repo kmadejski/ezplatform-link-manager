@@ -62,7 +62,7 @@ class LinkManagerController extends Controller
         return $this->render('EzPlatformLinkManagerBundle:LinkManager:list.html.twig', [
             'form' => $form->createView(),
             'can_edit' => $this->isGranted(new Attribute('url', 'update')),
-            'urls' => $urls
+            'urls' => $urls,
         ]);
     }
 
@@ -92,7 +92,7 @@ class LinkManagerController extends Controller
 
         return $this->render('EzPlatformLinkManagerBundle:LinkManager:edit.html.twig', [
             'form' => $form->createView(),
-            'url' => $url
+            'url' => $url,
         ]);
     }
 
@@ -114,7 +114,7 @@ class LinkManagerController extends Controller
         return $this->render('EzPlatformLinkManagerBundle:LinkManager:view.html.twig', [
             'url' => $url,
             'can_edit' => $this->isGranted(new Attribute('url', 'update')),
-            'usages' => $usages
+            'usages' => $usages,
         ]);
     }
 
@@ -129,7 +129,7 @@ class LinkManagerController extends Controller
         return $this->container->get('form.factory')->createNamed('', 'ezplatformlinkmanager_url_list', $data, [
             'method' => Request::METHOD_GET,
             'action' => $this->generateUrl('admin_link_manager_list'),
-            'csrf_protection' => false
+            'csrf_protection' => false,
         ]);
     }
 
@@ -146,8 +146,8 @@ class LinkManagerController extends Controller
         return $this->createForm(URLEditType::class, $data, [
             'method' => Request::METHOD_POST,
             'action' => $this->generateUrl('admin_link_manager_edit', [
-                'urlId' => $url->id
-            ])
+                'urlId' => $url->id,
+            ]),
         ]);
     }
 
