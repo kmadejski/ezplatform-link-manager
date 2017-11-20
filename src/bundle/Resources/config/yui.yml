@@ -1,8 +1,0 @@
-system:
-    default:
-        yui:
-            modules:
-                ezplatformlinkmanager-navigationplugin:
-                    requires: ['ez-pluginregistry', 'ez-viewservicebaseplugin', 'ez-navigationitemview']
-                    dependencyOf: ['ez-navigationhubviewservice']
-                    path: '%link_management.public_dir%/js/views/services/plugins/ezplatformlinkmanager-navigationplugin.js'

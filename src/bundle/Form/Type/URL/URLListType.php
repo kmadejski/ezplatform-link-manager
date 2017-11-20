@@ -39,8 +39,8 @@ class URLListType extends AbstractType
     {
         $builder->add('status', ChoiceType::class, [
             'choices' => [
-                0 => $this->translator->trans('url.status.invalid', [], 'linkmanager'),
-                1 => $this->translator->trans('url.status.valid', [], 'linkmanager'),
+                $this->translator->trans('url.status.invalid', [], 'linkmanager') => 0,
+                $this->translator->trans('url.status.valid', [], 'linkmanager') => 1,
             ],
             'placeholder' => $this->translator->trans('url.status.all', [], 'linkmanager'),
             'required' => false,

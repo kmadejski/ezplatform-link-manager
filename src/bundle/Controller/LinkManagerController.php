@@ -3,18 +3,22 @@
 namespace EzSystems\EzPlatformLinkManagerBundle\Controller;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
+use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query as Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Mapper\URLMapper;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLEditType;
+use EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLListType;
 use EzSystems\EzPlatformLinkManagerBundle\Pagination\Pagerfanta\URLSearchAdapter;
 use EzSystems\EzPlatformLinkManagerBundle\Pagination\Pagerfanta\URLUsagesAdapter;
-use EzSystems\PlatformUIBundle\Controller\Controller;
+use EzSystems\EzPlatformAdminUiBundle\Controller\Controller;
 use Pagerfanta\Pagerfanta;
+use Pagerfanta\View\TwitterBootstrap4View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class LinkManagerController extends Controller
 {
@@ -25,14 +29,27 @@ class LinkManagerController extends Controller
      */
     private $urlService;
 
+    /** @var \EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface */
+    private $notificationHandler;
+
+    /** @var \Symfony\Component\Translation\TranslatorInterface */
+    private $translator;
+
     /**
      * EzPlatformLinkManagerController constructor.
      *
      * @param \EzSystems\EzPlatformLinkManager\API\Repository\URLService $urlService
+     * @param \EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface $notificationHandler
+     * @param \Symfony\Component\Translation\TranslatorInterface $translator
      */
-    public function __construct(URLService $urlService)
+    public function __construct(
+        URLService $urlService,
+        NotificationHandlerInterface $notificationHandler,
+        TranslatorInterface $translator)
     {
         $this->urlService = $urlService;
+        $this->notificationHandler = $notificationHandler;
+        $this->translator = $translator;
     }
 
     /**
@@ -59,9 +76,16 @@ class LinkManagerController extends Controller
         $urls->setCurrentPage($data->page);
         $urls->setMaxPerPage($data->limit ? $data->limit : self::DEFAULT_MAX_PER_PAGE);
 
+        $pagination = (new TwitterBootstrap4View())->render($urls, function ($page) use($request) {
+            return $this->generateUrl('admin_link_manager_list', [
+                'page' => $page,
+            ] + $request->query->all());
+        });
+
         return $this->render('EzPlatformLinkManagerBundle:LinkManager:list.html.twig', [
             'form' => $form->createView(),
             'can_edit' => $this->isGranted(new Attribute('url', 'update')),
+            'pagination' => $pagination,
             'urls' => $urls,
         ]);
     }
@@ -82,11 +106,16 @@ class LinkManagerController extends Controller
         if ($form->isValid()) {
             try {
                 $this->urlService->updateUrl($url, $form->getData());
-                $this->notify('url.update.success', [], 'linkmanager');
 
-                return $this->redirectToRouteAfterFormPost('admin_link_manager_list');
+                $this->notificationHandler->success(
+                    $this->translator->trans('url.update.success', [], 'linkmanager')
+                );
+
+                return $this->redirectToRoute('admin_link_manager_list');
             } catch (\Exception $e) {
-                $this->notifyError('url.update.error', [], 'linkmanager');
+                $this->notificationHandler->error($this->translator->trans(
+                    'url.update.error', [], 'linkmanager'
+                ));
             }
         }
 
@@ -111,10 +140,18 @@ class LinkManagerController extends Controller
         $usages->setCurrentPage($request->query->getInt('page', 1));
         $usages->setMaxPerPage($request->query->getInt('limit', self::DEFAULT_MAX_PER_PAGE));
 
+        $pagination = (new TwitterBootstrap4View())->render($usages, function ($page) use($url) {
+            return $this->generateUrl('admin_link_manager_view', [
+                'page' => $page,
+                'urlId' => $url->id
+            ]);
+        });
+
         return $this->render('EzPlatformLinkManagerBundle:LinkManager:view.html.twig', [
             'url' => $url,
             'can_edit' => $this->isGranted(new Attribute('url', 'update')),
             'usages' => $usages,
+            'pagination' => $pagination
         ]);
     }
 
@@ -126,7 +163,7 @@ class LinkManagerController extends Controller
      */
     protected function createListForm(URLListData $data = null)
     {
-        return $this->container->get('form.factory')->createNamed('', 'ezplatformlinkmanager_url_list', $data, [
+        return $this->container->get('form.factory')->createNamed('', URLListType::class, $data, [
             'method' => Request::METHOD_GET,
             'action' => $this->generateUrl('admin_link_manager_list'),
             'csrf_protection' => false,

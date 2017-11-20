@@ -69,6 +69,13 @@ services:
         class: '%ezsystems.platformui.controller.link_management.class%'
         arguments:
             - '@ezpublish.api.service.url'
+            - '@EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface'
+            - '@translator'
+
+    ezsystems.platformui.configure_menu_listener:
+        class: EzSystems\EzPlatformLinkManagerBundle\EventListener\ConfigureMenuListener
+        tags:
+            - { name: kernel.event_subscriber }
 
     ezsystems.form.type.url_list:
         class: '%ezsystems.form.type.url_list.class%'
