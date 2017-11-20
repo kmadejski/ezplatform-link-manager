@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\Yaml\Yaml;
 
-class EzPlatformLinkManagerExtension extends Extension implements PrependExtensionInterface
+class EzPlatformLinkManagerExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -24,25 +24,25 @@ class EzPlatformLinkManagerExtension extends Extension implements PrependExtensi
     /**
      * {@inheritdoc}
      */
-    public function prepend(ContainerBuilder $container)
-    {
-        $container->prependExtensionConfig('assetic', [
-            'bundles' => ['EzPlatformLinkManagerBundle'],
-        ]);
+//    public function prepend(ContainerBuilder $container)
+//    {
+//        $container->prependExtensionConfig('assetic', [
+//            'bundles' => ['EzPlatformLinkManagerBundle'],
+//        ]);
+//
+//        $this->prependYUI($container);
+//    }
 
-        $this->prependYUI($container);
-    }
-
-    private function prependYUI(ContainerBuilder $container)
-    {
-        $container->setParameter(
-            'link_management.public_dir', 'bundles/ezplatformlinkmanager'
-        );
-
-        $yuiConfigFile = __DIR__ . '/../Resources/config/yui.yml';
-
-        $config = Yaml::parse(file_get_contents($yuiConfigFile));
-        $container->prependExtensionConfig('ez_platformui', $config);
-        $container->addResource(new FileResource($yuiConfigFile));
-    }
+//    private function prependYUI(ContainerBuilder $container)
+//    {
+//        $container->setParameter(
+//            'link_management.public_dir', 'bundles/ezplatformlinkmanager'
+//        );
+//
+//        $yuiConfigFile = __DIR__ . '/../Resources/config/yui.yml';
+//
+//        $config = Yaml::parse(file_get_contents($yuiConfigFile));
+//        $container->prependExtensionConfig('ez_platformui', $config);
+//        $container->addResource(new FileResource($yuiConfigFile));
+//    }
 }
