@@ -28,7 +28,7 @@ services:
         class: '%ezpublish.api.service.url_inner.class%'
         arguments:
             - '@ezpublish.api.repository'
-            - '@ezpublish.spi.persistence.legacy.url.handler'
+            - '@ezpublish.spi.persistence.cache.url.handler'
         lazy: true
 
     ezpublish.persistence.legacy.gateway.url.exception_conversion:
@@ -51,12 +51,12 @@ services:
     ezpublish.spi.persistence.legacy.url.criterion_converter:
         class: '%ezpublish.spi.persistence.legacy.url.criterion_converter.class%'
 
-#    ezpublish.spi.persistence.cache.url.handler:
-#        class: '%ezpublish.spi.persistence.cache.url.handler.class%'
-#        arguments:
-#            - '@ezpublish.cache_pool.spi.cache.decorator'
-#            - '@ezpublish.spi.persistence.legacy.url.handler'
-#            - '@ezpublish.spi.persistence.cache.persistenceLogger'
+    ezpublish.spi.persistence.cache.url.handler:
+        class: '%ezpublish.spi.persistence.cache.url.handler.class%'
+        arguments:
+            - '@ezpublish.cache_pool'
+            - '@ezpublish.spi.persistence.legacy.url.handler'
+            - '@ezpublish.spi.persistence.cache.persistenceLogger'
 
     ezpublish.spi.persistence.legacy.url.handler:
         class: '%ezpublish.spi.persistence.legacy.url.handler.class%'

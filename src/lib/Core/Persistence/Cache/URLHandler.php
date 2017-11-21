@@ -2,12 +2,12 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as URLHandlerInterface;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * SPI cache for URL Handler.
@@ -17,7 +17,7 @@ use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 class URLHandler implements URLHandlerInterface
 {
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator
+     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
      */
     protected $cache;
 
@@ -34,12 +34,12 @@ class URLHandler implements URLHandlerInterface
     /**
      * Setups current handler with everything needed.
      *
-     * @param \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $cache
+     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler $persistenceHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
-        CacheServiceDecorator $cache,
+        TagAwareAdapterInterface $cache,
         URLHandlerInterface $persistenceHandler,
         PersistenceLogger $logger)
     {
@@ -72,9 +72,14 @@ class URLHandler implements URLHandlerInterface
 
         $url = $this->persistenceHandler->updateUrl($id, $struct);
 
-        $this->cache->clear('url', $id);
-        // TODO: Find better way to clear content cache for url usages
-        $this->cache->clear('content');
+        $this->cache->invalidateTags(['url-' . $id]);
+
+        $usages = $this->getRelatedContentIds($id);
+        if (!empty($usages)) {
+            $this->cache->invalidateTags(array_map(function($id) {
+                return 'content-' . $id;
+            }, $usages));
+        }
 
         return $url;
     }
@@ -98,14 +103,19 @@ class URLHandler implements URLHandlerInterface
      */
     public function load($id)
     {
-        $cache = $this->cache->getItem('url', $id);
+        $cacheItem = $this->cache->getItem('ez-url-' . $id);
 
-        $url = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, ['url' => $id]);
-            $url = $this->persistenceHandler->load($id);
-            $cache->set($url)->save();
+        $url = $cacheItem->get();
+        if ($cacheItem->isHit()) {
+            return $url;
         }
+
+        $this->logger->logCall(__METHOD__, ['url' => $id]);
+        $url = $this->persistenceHandler->load($id);
+
+        $cacheItem->set($url);
+        $cacheItem->tag(['url-' . $id]);
+        $this->cache->save($cacheItem);
 
         return $url;
     }
@@ -115,14 +125,19 @@ class URLHandler implements URLHandlerInterface
      */
     public function getRelatedContentIds($id)
     {
-        $cache = $this->cache->getItem('url', $id, 'usages');
+        $cacheItem = $this->cache->getItem('ez-url-' . $id . '-usages');
 
-        $usages = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, ['url' => $id]);
-            $usages = $this->persistenceHandler->getRelatedContentIds($id);
-            $cache->set($usages)->save();
+        $usages = $cacheItem->get();
+        if ($cacheItem->isHit()) {
+            return $usages;
         }
+
+        $this->logger->logCall(__METHOD__, ['url' => $id]);
+        $usages = $this->persistenceHandler->getRelatedContentIds($id);
+
+        $cacheItem->set($usages);
+        $cacheItem->tag(['url-' . $id . '-usages']);
+        $this->cache->save($cacheItem);
 
         return $usages;
     }

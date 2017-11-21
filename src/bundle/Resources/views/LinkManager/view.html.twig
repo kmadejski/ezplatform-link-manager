@@ -6,19 +6,25 @@
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
         { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
         { value: 'url.list'|trans, url: path('admin_link_manager_list') },
-        { value: 'url.view'|trans }
+        { value: 'url.view'|trans({ '%id%': url.id }) }
     ]} %}
 {%- endblock -%}
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.view'|trans
+        title: 'url.view'|trans({ '%id%': url.id })
     } %}
 {%- endblock -%}
 
 {%- block content -%}
     <section class="container mt-5">
-        <div class="ez-table-header">
+        <div class="btn-toolbar justify-content-end" role="toolbar">
+            <a href="{{ path('admin_link_manager_edit', { urlId: url.id }) }}" class="btn btn-secondary">
+                {{ 'url.edit'|trans|desc('Edit')  }}
+            </a>
+        </div>
+
+        <div class="ez-table-header mt-4">
             <h5>{{ 'url.tab.information'|trans|desc('Details') }}</h5>
         </div>
 

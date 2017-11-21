@@ -19,13 +19,18 @@
 {%- block content -%}
     <section class="container mt-5">
         {{ form_start(form, {"attr": {"class": "form-inline"}}) }}
+
             {{ form_widget(form.searchQuery, { attr: {
                 'placeholder': 'url.search.placeholder'|trans,
+                'class': 'mb-2 mr-sm-2 mb-sm-0'
             }}) }}
 
-            {{ form_label(form.status) }}
-            {{ form_widget(form.status) }}
-            <button class="btn btn-submit">
+            {{ form_label(form.status) }} &nbsp;
+            {{ form_widget(form.status, { attr: {
+                'class': 'mb-2 mr-sm-2 mb-sm-0'
+            }}) }}
+
+            <button class="btn btn-primary">
                 {{ 'url.search'|trans }}
             </button>
 
@@ -33,7 +38,7 @@
         {{ form_end(form) }}
     </section>
 
-    <section class="container mt-5">
+    <section class="container mt-4">
         <div class="ez-table-header">
             <h5>{{ 'url.list.title'|trans|desc('Links') }}</h5>
         </div>

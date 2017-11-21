@@ -127,8 +127,8 @@
         <jms:reference-file line="85">src/bundle/Controller/LinkManagerController.php</jms:reference-file>
       </trans-unit>
       <trans-unit id="dce98314e5ba27c161d28c789d2b970180ea852c" resname="url.view">
-        <source>View</source>
-        <target>View</target>
+        <source>Link #%id%</source>
+        <target>Link #%id%</target>
         <note>key: url.view</note>
         <jms:reference-file line="119">src/bundle/Resources/views/LinkManager/view.html.twig</jms:reference-file>
         <jms:reference-file line="17">src/bundle/Resources/views/LinkManager/view.html.twig</jms:reference-file>

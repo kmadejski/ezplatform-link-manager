@@ -3,7 +3,7 @@ echo 'Translation extraction';
 cd ../../..;
 # Extract string for default locale
 echo '# Extract EzPlatformLinkManagerBundle';
-./app/console translation:extract en -v \
+./bin/console translation:extract en -v \
   --dir=./vendor/ezsystems/ezplatform-link-manager \
   --exclude-dir=Tests \
   --exclude-dir=vendor \
