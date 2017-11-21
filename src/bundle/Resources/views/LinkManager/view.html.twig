@@ -12,7 +12,8 @@
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.view'|trans({ '%id%': url.id })
+        title: 'url.view'|trans({ '%id%': url.id }),
+        iconName: 'link'
     } %}
 {%- endblock -%}
 
@@ -44,7 +45,7 @@
                         {% if url.lastChecked %}
                             {{ url.lastChecked | date('Y-m-d H:i') }}
                         {% else %}
-                            {{ 'This URL has not been checked.' }}
+                            {{ 'url.label.last_checked.never'|trans|desc('This URL has not been checked') }}
                         {% endif %}
                     </td>
                 </tr>
@@ -66,13 +67,20 @@
         </div>
 
         <table class="table">
+            <colgroup>
+                <col />
+                <col width="20%"/>
+                <col width="10%"/>
+                <col width="10%"/>
+            </colgroup>
+
             <thead>
-            <tr>
-                <th>Name</th>
-                <th>Status</th>
-                <th>Version</th>
-                <th></th>
-            </tr>
+                <tr>
+                    <th>{{ 'url.usages.column.name'|trans|desc('Name') }}</th>
+                    <th>{{ 'url.usages.column.status'|trans|desc('Status') }}</th>
+                    <th>{{ 'url.usages.column.version'|trans|desc('Status') }}</th>
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
                 {% for usage in usages %}
@@ -91,7 +99,7 @@
                         <td>{{ content.currentVersionNo }}</td>
                         <td>
                             <a href="{{ edit_url }}" class="btn btn-secondary">
-                                Edit
+                                {{ 'url.edit'|trans|desc('Edit') }}
                             </a>
                         </td>
                     </tr>
@@ -105,5 +113,5 @@
     </section>
 {%- endblock -%}
 
-{% block title %}{{ 'url.view'|trans }}{% endblock %}
+{% block title %}{{ 'url.view'|trans({ '%id%': url.id }) }}{% endblock %}
 

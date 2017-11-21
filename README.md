@@ -38,8 +38,9 @@ public function registerBundles()
 
 _linkManager:
     resource: '@EzPlatformLinkManagerBundle/Resources/config/routing.yml'
-```
-
+    defaults:
+        siteaccess_group_whitelist: 'admin_group'
+```    
 3. Require the bundle with composer 
 ```shell
 composer require ezsystems/ezplatform-link-manager:dev-master

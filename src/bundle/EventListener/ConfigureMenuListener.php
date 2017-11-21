@@ -21,7 +21,7 @@ class ConfigureMenuListener implements EventSubscriberInterface
         $parent->addChild(self::ITEM_ADMIN__LINK_MANAGER, [
             'route' => 'admin_link_manager_list',
             'extras' => [
-                'translation_domain' => 'menu'
+                'translation_domain' => 'menu',
             ],
         ]);
 

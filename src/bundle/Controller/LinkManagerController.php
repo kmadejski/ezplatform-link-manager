@@ -76,7 +76,7 @@ class LinkManagerController extends Controller
         $urls->setCurrentPage($data->page);
         $urls->setMaxPerPage($data->limit ? $data->limit : self::DEFAULT_MAX_PER_PAGE);
 
-        $pagination = (new TwitterBootstrap4View())->render($urls, function ($page) use($request) {
+        $pagination = (new TwitterBootstrap4View())->render($urls, function ($page) use ($request) {
             return $this->generateUrl('admin_link_manager_list', [
                 'page' => $page,
             ] + $request->query->all());
@@ -140,10 +140,10 @@ class LinkManagerController extends Controller
         $usages->setCurrentPage($request->query->getInt('page', 1));
         $usages->setMaxPerPage($request->query->getInt('limit', self::DEFAULT_MAX_PER_PAGE));
 
-        $pagination = (new TwitterBootstrap4View())->render($usages, function ($page) use($url) {
+        $pagination = (new TwitterBootstrap4View())->render($usages, function ($page) use ($url) {
             return $this->generateUrl('admin_link_manager_view', [
                 'page' => $page,
-                'urlId' => $url->id
+                'urlId' => $url->id,
             ]);
         });
 
@@ -151,7 +151,7 @@ class LinkManagerController extends Controller
             'url' => $url,
             'can_edit' => $this->isGranted(new Attribute('url', 'update')),
             'usages' => $usages,
-            'pagination' => $pagination
+            'pagination' => $pagination,
         ]);
     }
 

@@ -76,7 +76,7 @@ class URLHandler implements URLHandlerInterface
 
         $usages = $this->getRelatedContentIds($id);
         if (!empty($usages)) {
-            $this->cache->invalidateTags(array_map(function($id) {
+            $this->cache->invalidateTags(array_map(function ($id) {
                 return 'content-' . $id;
             }, $usages));
         }

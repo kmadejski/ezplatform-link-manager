@@ -12,7 +12,8 @@
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.edit'|trans
+        title: 'url.edit'|trans,
+        iconName: 'link'
     } %}
 {%- endblock -%}
 
@@ -31,10 +32,12 @@
     <section class="container mt-4 mb-4">
         <div class="btn-toolbar justify-content-end" role="toolbar" >
             <a href="{{ path('admin_link_manager_list') }}" class="btn btn-default">
-                Cancel
+                {{ 'url.edit.cancel'|trans|desc("Cancel") }}
             </a>
 
-            <button class="btn btn-primary">Save</button>
+            <button class="btn btn-primary">
+                {{ 'url.edit.save'|trans|desc('Save') }}
+            </button>
         </div>
     </section>
     {{ form_end(form) }}
