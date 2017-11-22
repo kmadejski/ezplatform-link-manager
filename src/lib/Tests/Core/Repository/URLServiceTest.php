@@ -2,7 +2,6 @@
 
 namespace EzSystems\EzPlatformLinkManager\Tests\Core\Repository;
 
-use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Repository\Repository;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Validity;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
@@ -56,7 +55,7 @@ class URLServiceTest extends TestCase
     /**
      * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
-    public function testFindUrlNonNumericOffset()
+    public function testFindUrlsNonNumericOffset()
     {
         $criterion = new Validity();
 
@@ -72,7 +71,7 @@ class URLServiceTest extends TestCase
     /**
      * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
-    public function testFindUrlNonNumericLimit()
+    public function testFindUrlsNonNumericLimit()
     {
         $criterion = new Validity();
 
@@ -85,7 +84,7 @@ class URLServiceTest extends TestCase
         $this->urlService->findUrls($criterion, 0, 'foo');
     }
 
-    public function testFindUrl()
+    public function testFindUrls()
     {
         $criterion = new Validity();
         $url = $this->getUrl();
@@ -166,7 +165,7 @@ class URLServiceTest extends TestCase
         $this->urlHandler
             ->expects($this->once())
             ->method('load')
-            ->with(12)
+            ->with($urlId)
             ->will($this->returnValue($spiUrl));
 
         $buildDomainObject = new \ReflectionMethod(URLService::class, 'buildDomainObject');
@@ -182,8 +181,8 @@ class URLServiceTest extends TestCase
         $this->assertEquals($urlUpdateStruct, $this->urlService->createUpdateStruct());
     }
 
-    private function getUrl()
+    private function getUrl($id = null)
     {
-        return new URL();
+        return new URL(['id' => $id]);
     }
 }
