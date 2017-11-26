@@ -1,5 +1,6 @@
 imports:
     - { resource: services/criterion_handlers.yml }
+    - { resource: services/url_checker.yml }
 
 parameters:
     ezpublish.api.service.url_inner.class: 'EzSystems\EzPlatformLinkManager\Core\Repository\URLService'
