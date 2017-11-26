@@ -121,13 +121,19 @@ class URLService implements URLServiceInterface
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1)
     {
+        $usages = $this->urlHandler->getRelatedContentIds($url->id);
+
         $query = new Query();
-        $query->filter = new ContentCriterion\LogicalAnd([
-            new ContentCriterion\ContentId(
-                $this->urlHandler->getRelatedContentIds($url->id)
-            ),
-            new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
-        ]);
+        if (!empty($usages)) {
+            $query->filter = new ContentCriterion\LogicalAnd([
+                new ContentCriterion\ContentId(
+                    $this->urlHandler->getRelatedContentIds($url->id)
+                ),
+                new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
+            ]);
+        } else {
+            $query->filter = new ContentCriterion\MatchNone();
+        }
 
         $query->offset = $offset;
         if ($limit > -1) {
