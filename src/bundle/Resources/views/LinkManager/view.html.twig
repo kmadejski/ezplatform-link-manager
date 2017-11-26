@@ -106,9 +106,11 @@
                         </tbody>
                     </table>
 
+                    {% if usages.haveToPaginate %}
                     <div class="ezplatformlinkmanager-pagination">
                         {{ pagerfanta(usages) }}
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

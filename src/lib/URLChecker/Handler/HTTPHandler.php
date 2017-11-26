@@ -77,6 +77,7 @@ class HTTPHandler implements URLHandlerInterface
             'timeout' => 10,
             'connection_timeout' => 5,
             'batch_size' => 10,
+            'ignore_certificate' => false
         ];
     }
 
@@ -101,6 +102,13 @@ class HTTPHandler implements URLHandlerInterface
             CURLOPT_NOBODY => true,
         ]);
 
+        if ($this->options['ignore_certificate']) {
+            curl_setopt_array($handler, [
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+            ]);
+        }
+
         $handlers[(int)$handler] = $url;
 
         return $handler;
@@ -117,13 +125,7 @@ class HTTPHandler implements URLHandlerInterface
     {
         $doUpdateStatus($url, $this->isSuccessful(curl_getinfo($handler, CURLINFO_HTTP_CODE)));
     }
-
-    /**
-     * Is status code successful?
-     *
-     * @param int $statusCode
-     * @return bool
-     */
+    
     private function isSuccessful($statusCode)
     {
         return $statusCode >= 200 && $statusCode < 300;
