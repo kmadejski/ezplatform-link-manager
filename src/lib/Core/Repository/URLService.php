@@ -126,9 +126,7 @@ class URLService implements URLServiceInterface
         $query = new Query();
         if (!empty($usages)) {
             $query->filter = new ContentCriterion\LogicalAnd([
-                new ContentCriterion\ContentId(
-                    $this->urlHandler->getRelatedContentIds($url->id)
-                ),
+                new ContentCriterion\ContentId($usages),
                 new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
             ]);
         } else {
