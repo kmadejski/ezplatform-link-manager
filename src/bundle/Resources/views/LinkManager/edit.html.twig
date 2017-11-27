@@ -4,7 +4,6 @@
 
 {%- block breadcrumbs -%}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
-        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
         { value: 'url.list'|trans, url: path('admin_link_manager_list') },
         { value: 'url.edit'|trans }
     ]} %}
