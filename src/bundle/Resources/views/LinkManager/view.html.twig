@@ -78,7 +78,6 @@
                 <tr>
                     <th>{{ 'url.usages.column.name'|trans|desc('Name') }}</th>
                     <th>{{ 'url.usages.column.status'|trans|desc('Status') }}</th>
-                    <th>{{ 'url.usages.column.version'|trans|desc('Status') }}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -96,7 +95,6 @@
                             </a>
                         </td>
                         <td>{{ content.published ? 'Published' : 'Draft' }}</td>
-                        <td>{{ content.currentVersionNo }}</td>
                         <td>
                             <a href="{{ edit_url }}" class="btn btn-secondary">
                                 {{ 'url.edit'|trans|desc('Edit') }}
