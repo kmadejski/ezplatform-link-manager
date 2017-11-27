@@ -97,8 +97,8 @@
         <note>key: url.tab.information</note>
       </trans-unit>
       <trans-unit id="af51e21b845c88f95912dd85c6e94559d7038df6" resname="url.tab.usages">
-        <source>Usages</source>
-        <target>Usages (%count%)</target>
+        <source>Content item(s) using this URL</source>
+        <target>Content item(s) using this URL (%count%)</target>
         <note>key: url.tab.usages</note>
       </trans-unit>
       <trans-unit id="f8004848ab391b70a287fac315ad2d7a546702fa" resname="url.update.error">
