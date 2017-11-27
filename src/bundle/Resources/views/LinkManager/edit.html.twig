@@ -5,13 +5,13 @@
 {%- block breadcrumbs -%}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
         { value: 'url.list'|trans, url: path('admin_link_manager_list') },
-        { value: 'url.editgit'|trans }
+        { value: 'url.edit'|trans }
     ]} %}
 {%- endblock -%}
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.edit'|trans,
+        title: 'url.editing'|trans({'%url%': url.url|length > 60 ? url.url|slice(0, 60) ~ '...' : url.url }),
         iconName: 'link'
     } %}
 {%- endblock -%}
