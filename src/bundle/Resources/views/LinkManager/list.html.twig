@@ -65,12 +65,12 @@
                     <td>{{ url.isValid ? 'url.status.valid'|trans : 'url.status.invalid'|trans }}</td>
                     <td>
                         {% if url.lastChecked %}
-                            {{ url.lastChecked | date('Y-m-d H:i') }}
+                            {{ url.lastChecked | date('M d, Y h:i:sA') }}
                         {% else %}
                             Never
                         {% endif %}
                     </td>
-                    <td>{{ url.modified | date('Y-m-d H:i') }}</td>
+                    <td>{{ url.modified | date('M d, Y h:i:sA') }}</td>
                     <td class="text-right">
                         {% if can_edit %}
                             <a href="{{ edit_url }}" class="btn btn-secondary" data-icon="&#xe606;">
