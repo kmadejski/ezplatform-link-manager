@@ -52,8 +52,8 @@
         <note>key: url.label.status</note>
       </trans-unit>
       <trans-unit id="d2c96c077eb7c3751d39ec3a861b17e60b210a1a" resname="url.list">
-        <source>Link management</source>
-        <target>Link management</target>
+        <source>Link manager</source>
+        <target>Link manager</target>
         <note>key: url.list</note>
       </trans-unit>
       <trans-unit id="24a0b301998be73b299ac86967952ef729264dec" resname="url.list.title">

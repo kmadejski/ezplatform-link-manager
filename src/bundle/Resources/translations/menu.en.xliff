@@ -8,7 +8,7 @@
     <body>
       <trans-unit id="448c06ebc1a762e3684e88177545c18360aa0c55" resname="main__content__link_manager">
         <source>Link management</source>
-        <target state="new">Link management</target>
+        <target state="new">Link manager</target>
         <note>key: main__content__link_manager</note>
       </trans-unit>
     </body>
