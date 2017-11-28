@@ -6,6 +6,7 @@ parameters:
     ezpublish.legacy.gateway.criterion_handler.url.match_none.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\MatchNone
     ezpublish.legacy.gateway.criterion_handler.url.validity.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\Validity
     ezpublish.legacy.gateway.criterion_handler.url.pattern.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\Pattern
+    ezpublish.legacy.gateway.criterion_handler.url.visible_only.class: EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler\VisibleOnly
 
 services:
     ezpublish.legacy.gateway.criterion_handler.url.base:
@@ -51,5 +52,11 @@ services:
     ezpublish.legacy.gateway.criterion_handler.url.pattern:
         parent: ezpublish.legacy.gateway.criterion_handler.url.base
         class: '%ezpublish.legacy.gateway.criterion_handler.url.pattern.class%'
+        tags:
+            - { name: ezpublish.legacy.gateway.criterion_handler.url }
+
+    ezpublish.legacy.gateway.criterion_handler.url.visible_only:
+        parent: ezpublish.legacy.gateway.criterion_handler.url.base
+        class: '%ezpublish.legacy.gateway.criterion_handler.url.visible_only.class%'
         tags:
             - { name: ezpublish.legacy.gateway.criterion_handler.url }

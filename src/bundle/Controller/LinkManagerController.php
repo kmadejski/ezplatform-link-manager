@@ -159,17 +159,16 @@ class LinkManagerController extends Controller
      */
     private function buildCriteria(URLListData $data)
     {
-        $criteria = [];
+        $criteria = [
+            new Criterion\VisibleOnly()
+        ];
+
         if ($data->searchQuery !== null) {
             $criteria[] = new Criterion\Pattern($data->searchQuery);
         }
 
         if ($data->status !== null) {
             $criteria[] = new Criterion\Validity($data->status);
-        }
-
-        if (empty($criteria)) {
-            return new Criterion\MatchAll();
         }
 
         return new Criterion\LogicalAnd($criteria);
