@@ -5,13 +5,13 @@
 {%- block breadcrumbs -%}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
         { value: 'url.list'|trans, url: path('admin_link_manager_list') },
-        { value: 'url.view'|trans({ '%url%': url.url|length > 60 ? url.url|slice(0, 60) ~ '...' : url.url }) }
+        { value: 'url.detail'|trans|desc('Link detail')}
     ]} %}
 {%- endblock -%}
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.view'|trans({ '%url%': url.url|length > 60 ? url.url|slice(0, 60) ~ '...' : url.url }),
+        title: url.url|truncate(60),
         iconName: 'link'
     } %}
 {%- endblock -%}
@@ -117,5 +117,5 @@
     </section>
 {%- endblock -%}
 
-{% block title %}{{ 'url.view'|trans({ '%url%': url.url|length > 60 ? url.url|slice(0, 60) ~ '...' : url.url }) }}{% endblock %}
+{% block title %}{{ 'url.view'|trans({ '%url%': url.url|truncate(60) }) }}{% endblock %}
 

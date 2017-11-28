@@ -11,7 +11,7 @@
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.editing'|trans({'%url%': url.url|length > 60 ? url.url|slice(0, 60) ~ '...' : url.url }),
+        title: 'url.editing'|trans({'%url%': url.url|truncate(50) }),
         iconName: 'link'
     } %}
 {%- endblock -%}
