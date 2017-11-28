@@ -109,8 +109,8 @@
         <jms:reference-file line="26">src/bundle/Resources/views/LinkManager/view.html.twig</jms:reference-file>
       </trans-unit>
       <trans-unit id="af51e21b845c88f95912dd85c6e94559d7038df6" resname="url.tab.usages">
-        <source>Usages (%count%)</source>
-        <target>Usages (%count%)</target>
+        <source>Content items using the URL (%count%)</source>
+        <target>Content items using the URL (%count%)</target>
         <note>key: url.tab.usages</note>
         <jms:reference-file line="31">src/bundle/Resources/views/LinkManager/view.html.twig</jms:reference-file>
       </trans-unit>
