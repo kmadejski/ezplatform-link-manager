@@ -53,8 +53,8 @@
         <jms:reference-file line="43">src/bundle/Resources/views/LinkManager/view.html.twig</jms:reference-file>
       </trans-unit>
       <trans-unit id="d2c96c077eb7c3751d39ec3a861b17e60b210a1a" resname="url.list">
-        <source>Link management</source>
-        <target>Link management</target>
+        <source>Link manager</source>
+        <target>Link manager</target>
         <note>key: url.list</note>
         <jms:reference-file line="8">src/bundle/Resources/views/LinkManager/edit.html.twig</jms:reference-file>
         <jms:reference-file line="15">src/bundle/Resources/views/LinkManager/list.html.twig</jms:reference-file>
