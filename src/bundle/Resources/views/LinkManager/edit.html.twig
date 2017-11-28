@@ -4,7 +4,8 @@
 
 {%- block header_breadcrumbs -%}
     {% set breadcrumb_items = [
-        { link: path('admin_link_manager_list'), label: 'url.list'|trans() },
+        { link: path('admin_link_manager_list'), label: 'url.list'|trans },
+        { link: path('admin_link_manager_view', {urlId: url.id}), label: 'url.detail'|trans},
         { link: '', label: 'url.edit'|trans }
     ] %}
 
@@ -13,7 +14,7 @@
 
 {%- block header_title -%}
     <h1 class="ez-page-header-name">
-        {{ 'url.edit'|trans }}
+        {{ 'url.editing'|trans({'%url%': url.url|truncate(60) }) }}
     </h1>
 {%- endblock -%}
 
@@ -41,7 +42,7 @@
     </section>
 {%- endblock -%}
 
-{% block title %}{{ 'url.edit'|trans }}{% endblock %}
+{% block title %}{{ 'url.editing'|trans({'%url%': url.url|truncate(60) }) }}{% endblock %}
 
 {% block notification %}
     {% if not form.vars.valid %}

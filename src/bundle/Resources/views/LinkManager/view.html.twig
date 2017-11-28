@@ -5,7 +5,7 @@
 {%- block header_breadcrumbs -%}
     {% set breadcrumb_items = [
         { link: path('admin_link_manager_list'), label: 'url.list'|trans },
-        { link: '', label: 'url.view'|trans }
+        { link: '', label: 'url.detail'|trans }
     ] %}
 
     {{ parent() }}
@@ -13,7 +13,7 @@
 
 {%- block header_title -%}
     <h1 class="ez-page-header-name">
-        {{ 'url.view'|trans }}
+        {{ 'url.view'|trans({'%url%': url.url|truncate(60) }) }}
     </h1>
 {%- endblock -%}
 
@@ -113,5 +113,5 @@
     </section>
 {%- endblock -%}
 
-{% block title %}{{ 'url.view'|trans }}{% endblock %}
+{% block title %}{{ 'url.view'|trans({'%url%': url.url|truncate(60) }) }}{% endblock %}
 

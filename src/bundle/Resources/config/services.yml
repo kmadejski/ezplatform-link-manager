@@ -82,3 +82,8 @@ services:
         class: '%ezsystems.form.type.url_edit.class%'
         tags:
             - { name: 'form.type', alias: 'ezplatformlinkmanager_url_edit' }
+
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+            - { name: twig.extension }

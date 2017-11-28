@@ -51,7 +51,7 @@
                         {% set view_url = path('admin_link_manager_view', {urlId: url.id}) %}
                         <tr>
                             <td>
-                                <a href="{{ view_url }}">{{ url.url }}</a>
+                                <a href="{{ view_url }}">{{ url.url|truncate(60) }}</a>
                                 (<a href="{{ url.url }}" target="_blank">{{ 'url.open'|trans }}</a>)
                             </td>
                             <td>{{ url.isValid ? 'url.status.valid'|trans : 'url.status.invalid'|trans }}</td>
