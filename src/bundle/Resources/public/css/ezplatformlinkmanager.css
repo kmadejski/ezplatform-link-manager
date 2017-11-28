@@ -1,0 +1,9 @@
+.ezplatformlinkmanager-pagination {
+    text-align: center;
+    margin: 10px 0;
+}
+
+.ezplatformlinkmanager-pagination span {
+    display: inline-block;
+    padding: 3px;
+}

@@ -31,6 +31,7 @@ class EzPlatformLinkManagerExtension extends Extension implements PrependExtensi
         ]);
 
         $this->prependYUI($container);
+        $this->prependCSS($container);
     }
 
     private function prependYUI(ContainerBuilder $container)
@@ -44,5 +45,18 @@ class EzPlatformLinkManagerExtension extends Extension implements PrependExtensi
         $config = Yaml::parse(file_get_contents($yuiConfigFile));
         $container->prependExtensionConfig('ez_platformui', $config);
         $container->addResource(new FileResource($yuiConfigFile));
+    }
+
+    private function prependCSS(ContainerBuilder $container)
+    {
+        $container->setParameter(
+            'ezplatformlinkmanager.css_dir',
+            'bundles/ezplatformlinkmanager/css'
+        );
+
+        $cssConfigFile = __DIR__ . '/../Resources/config/css.yml';
+        $config = Yaml::parse(file_get_contents($cssConfigFile));
+        $container->prependExtensionConfig('ez_platformui', $config);
+        $container->addResource(new FileResource($cssConfigFile));
     }
 }

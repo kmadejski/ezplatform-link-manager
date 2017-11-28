@@ -1,0 +1,6 @@
+system:
+    default:
+        css:
+            files:
+                - '%ezplatformlinkmanager.css_dir%/ezplatformlinkmanager.css'
+
