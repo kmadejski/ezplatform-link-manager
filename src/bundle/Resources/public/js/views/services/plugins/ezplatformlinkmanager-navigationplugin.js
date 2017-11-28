@@ -8,8 +8,8 @@ YUI.add('ezplatformlinkmanager-navigationplugin', function (Y) {
             service.addNavigationItem({
                 Constructor: Y.eZ.NavigationItemView,
                 config: {
-                    title: "Link management",
-                    identifier: "link-management",
+                    title: "Link manager",
+                    identifier: "link-manager",
                     route: {
                         name: 'adminGenericRoute',
                         params: {
@@ -18,7 +18,7 @@ YUI.add('ezplatformlinkmanager-navigationplugin', function (Y) {
                     },
                     matchParameter: 'uri'
                 }
-            }, 'admin');
+            }, 'platform');
         },
     }, {
         NS: 'ezPlatformLinkManagerNavigationPlugin'
