@@ -4,7 +4,6 @@
 
 {%- block header_breadcrumbs -%}
     {% set breadcrumb_items = [
-        { link: path('admin_dashboard'), label: 'dashboard.title'|trans({}, 'dashboard') },
         { link: path('admin_link_manager_list'), label: 'url.list'|trans() },
         { link: '', label: 'url.edit'|trans }
     ] %}
