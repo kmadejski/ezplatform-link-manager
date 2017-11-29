@@ -11,13 +11,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ConfigureMenuListener implements EventSubscriberInterface
 {
-    const ITEM_ADMIN__LINK_MANAGER = 'main__admin__link_manager';
+    const ITEM_ADMIN__LINK_MANAGER = 'main__content__link_manager';
 
     public function onMenuConfigure(ConfigureMenuEvent $event)
     {
         $menu = $event->getMenu();
 
-        $parent = $menu->getChild(MainMenuBuilder::ITEM_ADMIN);
+        $parent = $menu->getChild(MainMenuBuilder::ITEM_CONTENT);
         $parent->addChild(self::ITEM_ADMIN__LINK_MANAGER, [
             'route' => 'admin_link_manager_list',
             'extras' => [

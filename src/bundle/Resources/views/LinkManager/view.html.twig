@@ -4,15 +4,14 @@
 
 {%- block breadcrumbs -%}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
-        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
         { value: 'url.list'|trans, url: path('admin_link_manager_list') },
-        { value: 'url.view'|trans({ '%id%': url.id }) }
+        { value: 'url.detail'|trans|desc('Link detail')}
     ]} %}
 {%- endblock -%}
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.view'|trans({ '%id%': url.id }),
+        title: url.url|truncate(60),
         iconName: 'link'
     } %}
 {%- endblock -%}
@@ -20,9 +19,7 @@
 {%- block content -%}
     <section class="container mt-5">
         <div class="btn-toolbar justify-content-end" role="toolbar">
-            <a href="{{ path('admin_link_manager_edit', { urlId: url.id }) }}" class="btn btn-secondary">
-                {{ 'url.edit'|trans|desc('Edit')  }}
-            </a>
+
         </div>
 
         <div class="ez-table-header mt-4">
@@ -33,7 +30,14 @@
             <tbody>
                 <tr>
                     <th>{{ 'url.label.address'|trans }}</th>
-                    <td><a href="{{ url.url }}" target="_blank">{{ url.url }}</a></td>
+                    <td>
+                        <a href="{{ url.url }}" target="_blank">{{ url.url }}</a>
+                        <a href="{{ path('admin_link_manager_edit', { urlId: url.id }) }}" class="btn btn-icon float-right">
+                            <svg class="ez-icon ez-icon-edit">
+                                <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                            </svg>
+                        </a>
+                    </td>
                 </tr>
                 <tr>
                     <th>{{ 'url.label.status'|trans }}</th>
@@ -43,7 +47,7 @@
                     <th>{{ 'url.label.last_checked'|trans }}</th>
                     <td>
                         {% if url.lastChecked %}
-                            {{ url.lastChecked | date('Y-m-d H:i') }}
+                            {{ url.lastChecked | date('M d, Y h:i:sA') }}
                         {% else %}
                             {{ 'url.label.last_checked.never'|trans|desc('This URL has not been checked') }}
                         {% endif %}
@@ -51,11 +55,11 @@
                 </tr>
                 <tr>
                     <th>{{ 'url.label.created'|trans }}</th>
-                    <td>{{ url.created | date('Y-m-d H:i') }}</td>
+                    <td>{{ url.created | date('M d, Y h:i:sA') }}</td>
                 </tr>
                 <tr>
                     <th>{{ 'url.label.modified'|trans }}</th>
-                    <td>{{ url.modified | date('Y-m-d H:i') }}</td>
+                    <td>{{ url.modified | date('M d, Y h:i:sA') }}</td>
                 </tr>
             </tbody>
         </table>
@@ -63,7 +67,7 @@
 
     <section class="container mt-5">
         <div class="ez-table-header">
-            <h5>{{ 'url.tab.usages'|trans({'%count%': usages.nbResults })|desc('Usages') }}</h5>
+            <h5>{{ 'url.tab.usages'|trans({'%count%': usages.nbResults })|desc('Content item(s) using this URL') }}</h5>
         </div>
 
         <table class="table">
@@ -78,7 +82,6 @@
                 <tr>
                     <th>{{ 'url.usages.column.name'|trans|desc('Name') }}</th>
                     <th>{{ 'url.usages.column.status'|trans|desc('Status') }}</th>
-                    <th>{{ 'url.usages.column.version'|trans|desc('Status') }}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -96,10 +99,11 @@
                             </a>
                         </td>
                         <td>{{ content.published ? 'Published' : 'Draft' }}</td>
-                        <td>{{ content.currentVersionNo }}</td>
                         <td>
-                            <a href="{{ edit_url }}" class="btn btn-secondary">
-                                {{ 'url.edit'|trans|desc('Edit') }}
+                            <a href="{{ edit_url }}" class="btn btn-icon">
+                                <svg class="ez-icon ez-icon-edit">
+                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                                </svg>
                             </a>
                         </td>
                     </tr>
@@ -113,5 +117,5 @@
     </section>
 {%- endblock -%}
 
-{% block title %}{{ 'url.view'|trans({ '%id%': url.id }) }}{% endblock %}
+{% block title %}{{ 'url.view'|trans({ '%url%': url.url|truncate(60) }) }}{% endblock %}
 

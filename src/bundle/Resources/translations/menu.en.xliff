@@ -6,10 +6,10 @@
       <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
     </header>
     <body>
-      <trans-unit id="448c06ebc1a762e3684e88177545c18360aa0c55" resname="main__admin__link_manager">
+      <trans-unit id="448c06ebc1a762e3684e88177545c18360aa0c55" resname="main__content__link_manager">
         <source>Link management</source>
-        <target state="new">Link management</target>
-        <note>key: main__admin__link_manager</note>
+        <target state="new">Link manager</target>
+        <note>key: main__content__link_manager</note>
       </trans-unit>
     </body>
   </file>

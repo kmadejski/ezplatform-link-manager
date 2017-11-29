@@ -4,14 +4,13 @@
 
 {%- block breadcrumbs -%}
     {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
-        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
-        { value: 'url.list'|trans|desc('Link management') }
+        { value: 'url.list'|trans|desc('Link manager') }
     ]} %}
 {%- endblock -%}
 
 {%- block pageTitle -%}
     {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.list'|trans|desc('Link management'),
+        title: 'url.list'|trans|desc('Link manager'),
         iconName: 'link'
     } %}
 {%- endblock -%}
@@ -59,26 +58,30 @@
                 {% set view_url = path('admin_link_manager_view', {urlId: url.id}) %}
                 <tr>
                     <td>
-                        <a href="{{ view_url }}">{{ url.url|length > 60 ? url.url|slice(0, 60) ~ '...' : url.url }}</a>
+                        <a href="{{ view_url }}">{{ url.url|truncate(60) }}</a>
                         (<a href="{{ url.url }}" target="_blank">{{ 'url.open'|trans }}</a>)
                     </td>
                     <td>{{ url.isValid ? 'url.status.valid'|trans : 'url.status.invalid'|trans }}</td>
                     <td>
                         {% if url.lastChecked %}
-                            {{ url.lastChecked | date('Y-m-d H:i') }}
+                            {{ url.lastChecked | date('M d, Y h:i:sA') }}
                         {% else %}
                             Never
                         {% endif %}
                     </td>
-                    <td>{{ url.modified | date('Y-m-d H:i') }}</td>
+                    <td>{{ url.modified | date('M d, Y h:i:sA') }}</td>
                     <td class="text-right">
                         {% if can_edit %}
-                            <a href="{{ edit_url }}" class="btn btn-secondary" data-icon="&#xe606;">
-                                {{ 'url.edit'|trans }}
+                            <a href="{{ edit_url }}" class="btn btn-icon">
+                                <svg class="ez-icon ez-icon-edit">
+                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                                </svg>
                             </a>
                         {% else %}
-                            <span class="btn btn-secondary" data-icon="&#xe606;">
-                                {{ 'url.edit'|trans }}
+                            <span class="btn btn-icon">
+                                <svg class="ez-icon ez-icon-edit">
+                                    <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
+                                </svg>
                             </span>
                         {% endif %}
                     </td>
