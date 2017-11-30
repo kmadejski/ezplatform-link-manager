@@ -19,23 +19,27 @@
         <div class="ez-table-data is-flexible">
             <div class="ez-table-data-container">
                 {{ form_start(form, {"attr": {"class": "pure-form pure-form-aligned"}}) }}
-                    <fieldset>
-                        {{ form_widget(form.searchQuery, { attr: {
-                            'placeholder': 'url.search.placeholder'|trans,
-                            'class': ''
-                        }}) }}
+                    <fieldset class="ezplatformlinkmanager-filters">
+                        <span class="ezplatformlinkmanager-filter-searchquery">
+                            {{ form_widget(form.searchQuery, { attr: {
+                                'placeholder': 'url.search.placeholder'|trans
+                            }}) }}
 
-                        {{ form_label(form.status) }}
-                        {{ form_widget(form.status) }}
-                        <button class="pure-button ez-button">
-                            {{ 'url.search'|trans }}
-                        </button>
+                            <button class="pure-button ez-button">
+                                {{ 'url.search'|trans }}
+                            </button>
+                        </span>
+
+                        <span class="ezplatformlinkmanager-filter-status">
+                            {{ form_label(form.status) }}
+                            {{ form_widget(form.status) }}
+                        </span>
                     </fieldset>
 
                     {{ form_widget(form.page, { attr: { value: '1' }}) }}
                 {{ form_end(form) }}
 
-                <table class="pure-table pure-table-striped ez-selection-table">
+                <table class="pure-table pure-table-striped ez-selection-table ezplatformlinkmanager-link-list">
                     <thead>
                         <tr>
                             <th>{{ 'url.label.address'|trans }}</th>

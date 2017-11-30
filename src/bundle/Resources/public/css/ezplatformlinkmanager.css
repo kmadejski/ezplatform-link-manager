@@ -3,7 +3,34 @@
     margin: 10px 0;
 }
 
-.ezplatformlinkmanager-pagination span {
+.ezplatformlinkmanager-pagination span,
+.ezplatformlinkmanager-pagination a {
+    background: #e6e6e6;
+    background: linear-gradient(to bottom, #fff 0%, #e6e6e6 100%);
+    border: 1px solid #bbb;
+    border-radius: 2px;
     display: inline-block;
+    margin: 0 3px;
+    min-width: 20px;
     padding: 3px;
+}
+
+.ezplatformlinkmanager-link-list {
+    min-width: 1024px;
+}
+
+.ezplatformlinkmanager-filters {
+    clear: both;
+}
+
+.ezplatformlinkmanager-filter-searchquery {
+    float: left;
+    width: 50%;
+    text-align: left;
+}
+
+.ezplatformlinkmanager-filter-status {
+    float: right;
+    width: 50%;
+    text-align: right;
 }
