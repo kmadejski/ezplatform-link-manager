@@ -79,6 +79,12 @@
                                 {% endif %}
                             </td>
                         </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5">
+                                <p><i>{{ 'url.list.no_urls'|trans }}</i></p>
+                            </td>
+                        </tr>
                     {% endfor %}
                     </tbody>
                 </table>
