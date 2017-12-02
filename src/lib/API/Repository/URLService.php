@@ -49,7 +49,7 @@ interface URLService
      * @param int $id ID of URL
      * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\URL
      */
-    public function loadUrl($id);
+    public function loadById($id);
 
     /**
      * Load single URL (by URL).

@@ -75,7 +75,7 @@ class LinkManagerController extends Controller
      */
     public function editAction(Request $request, $urlId)
     {
-        $url = $this->urlService->loadUrl($urlId);
+        $url = $this->urlService->loadById($urlId);
 
         $form = $this->createEditForm($url);
         $form->handleRequest($request);
@@ -105,7 +105,7 @@ class LinkManagerController extends Controller
      */
     public function viewAction(Request $request, $urlId)
     {
-        $url = $this->urlService->loadUrl($urlId);
+        $url = $this->urlService->loadById($urlId);
 
         $usages = new Pagerfanta(new URLUsagesAdapter($url, $this->urlService));
         $usages->setCurrentPage($request->query->getInt('page', 1));
@@ -160,7 +160,7 @@ class LinkManagerController extends Controller
     private function buildCriteria(URLListData $data)
     {
         $criteria = [
-            new Criterion\VisibleOnly()
+            new Criterion\VisibleOnly(),
         ];
 
         if ($data->searchQuery !== null) {

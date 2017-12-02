@@ -64,9 +64,9 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadUrl($id)
+    public function loadById($id)
     {
-        return $this->service->loadUrl($id);
+        return $this->service->loadById($id);
     }
 
     /**

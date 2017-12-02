@@ -136,7 +136,7 @@ class URLServiceTest extends TestCase
     /**
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
-    public function testLoadUrlUnauthorized()
+    public function testLoadByIdUnauthorized()
     {
         $url = $this->getUrl();
 
@@ -146,10 +146,10 @@ class URLServiceTest extends TestCase
             ->with('url', 'view')
             ->will($this->returnValue(false));
 
-        $this->urlService->loadUrl($url->id);
+        $this->urlService->loadById($url->id);
     }
 
-    public function testLoadUrl()
+    public function testLoadById()
     {
         $urlId = 12;
 
@@ -172,7 +172,7 @@ class URLServiceTest extends TestCase
         $buildDomainObject->setAccessible(true);
         $apiUrl = $buildDomainObject->invoke($this->urlService, $spiUrl);
 
-        $this->assertEquals($apiUrl, $this->urlService->loadUrl($urlId));
+        $this->assertEquals($apiUrl, $this->urlService->loadById($urlId));
     }
 
     public function testCreateUpdateStruct()

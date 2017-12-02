@@ -86,7 +86,7 @@ class URLService implements URLServiceInterface
             throw new InvalidArgumentException('struct', 'url already exists');
         }
 
-        $updateStruct = $this->buildUpdateStruct($this->loadUrl($url->id), $struct);
+        $updateStruct = $this->buildUpdateStruct($this->loadById($url->id), $struct);
 
         $this->repository->beginTransaction();
         try {
@@ -97,13 +97,13 @@ class URLService implements URLServiceInterface
             throw $e;
         }
 
-        return $this->loadUrl($url->id);
+        return $this->loadById($url->id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadUrl($id)
+    public function loadById($id)
     {
         if ($this->repository->hasAccess('url', 'view') !== true) {
             throw new UnauthorizedException('url', 'view');
