@@ -72,7 +72,7 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function load($id)
+    public function loadById($id)
     {
         $url = $this->urlMapper->extractURLsFromRows(
             $this->urlGateway->loadUrlData($id)

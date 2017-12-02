@@ -12,7 +12,7 @@ interface Handler
 
     public function find(Criterion $criterion, $offset = 0, $limit = -1);
 
-    public function load($id);
+    public function loadById($id);
 
     public function loadByUrl($url);
 

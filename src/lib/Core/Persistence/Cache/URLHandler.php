@@ -95,14 +95,14 @@ class URLHandler implements URLHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function load($id)
+    public function loadById($id)
     {
         $cache = $this->cache->getItem('url', $id);
 
         $url = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, ['url' => $id]);
-            $url = $this->persistenceHandler->load($id);
+            $url = $this->persistenceHandler->loadById($id);
             $cache->set($url)->save();
         }
 

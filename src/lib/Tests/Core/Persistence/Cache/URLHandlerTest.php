@@ -107,7 +107,7 @@ class URLHandlerTest extends TestCase
         $this->urlHandler->find($criterion, 0, -1);
     }
 
-    public function testLoadWithCache()
+    public function testLoadByIdWithCache()
     {
         $url = $this->getUrl();
 
@@ -129,10 +129,10 @@ class URLHandlerTest extends TestCase
             ->method('isMiss')
             ->will($this->returnValue(false));
 
-        $this->assertEquals($url, $this->urlHandler->load($url->id));
+        $this->assertEquals($url, $this->urlHandler->loadById($url->id));
     }
 
-    public function testLoadWithoutCache()
+    public function testLoadByIdWithoutCache()
     {
         $url = $this->getUrl();
 
@@ -157,13 +157,13 @@ class URLHandlerTest extends TestCase
         $this->logger
             ->expects($this->once())
             ->method('logCall')
-            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::load', [
+            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::loadById', [
                 'url' => $url->id,
             ]);
 
         $this->persistenceHandler
             ->expects($this->once())
-            ->method('load')
+            ->method('loadById')
             ->with($url->id)
             ->will($this->returnValue($url));
 
@@ -179,7 +179,7 @@ class URLHandlerTest extends TestCase
             ->with()
             ->will($this->returnSelf());
 
-        $this->assertEquals($url, $this->urlHandler->load($url->id));
+        $this->assertEquals($url, $this->urlHandler->loadById($url->id));
     }
 
     public function testGetRelatedContentIdsWithCache()

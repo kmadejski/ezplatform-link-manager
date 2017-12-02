@@ -164,7 +164,7 @@ class URLServiceTest extends TestCase
 
         $this->urlHandler
             ->expects($this->once())
-            ->method('load')
+            ->method('loadById')
             ->with($urlId)
             ->will($this->returnValue($spiUrl));
 

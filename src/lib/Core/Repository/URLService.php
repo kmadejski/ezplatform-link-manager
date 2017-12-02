@@ -110,7 +110,7 @@ class URLService implements URLServiceInterface
         }
 
         return $this->buildDomainObject(
-            $this->urlHandler->load($id)
+            $this->urlHandler->loadById($id)
         );
     }
 

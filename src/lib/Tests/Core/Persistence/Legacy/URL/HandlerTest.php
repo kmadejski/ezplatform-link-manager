@@ -119,7 +119,7 @@ class HandlerTest extends TestCase
             ->method('extractURLsFromRows')
             ->with($rows);
 
-        $this->handler->load($url->id);
+        $this->handler->loadById($url->id);
     }
 
     public function testLoadWithUrlData()
@@ -138,7 +138,7 @@ class HandlerTest extends TestCase
             ->with([])
             ->will($this->returnValue($urls));
 
-        $this->assertEquals($urls[0], $this->handler->load($urls[0]->id));
+        $this->assertEquals($urls[0], $this->handler->loadById($urls[0]->id));
     }
 
     public function testGetRelatedContentIds()
