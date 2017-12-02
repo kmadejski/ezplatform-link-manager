@@ -17,6 +17,13 @@ class URLQuery extends ValueObject
     public $filter;
 
     /**
+     * Query sorting clauses.
+     *
+     * @var \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\SortClause[]
+     */
+    public $sortClauses = [];
+
+    /**
      * Query offset.
      *
      * Sets the offset for search hits, used for paging the results.

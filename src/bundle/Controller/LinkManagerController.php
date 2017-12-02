@@ -5,6 +5,7 @@ namespace EzSystems\EzPlatformLinkManagerBundle\Controller;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion as Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\SortClause as SortClause;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData;
@@ -161,6 +162,9 @@ class LinkManagerController extends Controller
     private function buildListQuery(URLListData $data)
     {
         $query = new URLQuery();
+        $query->sortClauses = [
+            new SortClause\URL(),
+        ];
 
         $criteria = [
             new Criterion\VisibleOnly(),

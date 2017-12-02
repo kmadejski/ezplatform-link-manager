@@ -61,7 +61,12 @@ class Handler implements HandlerInterface
      */
     public function find(URLQuery $query)
     {
-        $results = $this->urlGateway->find($query->filter, $query->offset, $query->limit);
+        $results = $this->urlGateway->find(
+            $query->filter,
+            $query->offset,
+            $query->limit,
+            $query->sortClauses
+        );
 
         return [
             'count' => $results['count'],

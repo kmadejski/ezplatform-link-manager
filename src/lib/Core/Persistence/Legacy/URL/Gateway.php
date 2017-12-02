@@ -11,7 +11,7 @@ abstract class Gateway
 
     abstract public function updateUrl(URL $url);
 
-    abstract public function find(Criterion $criterion, $offset, $limit, $doCount = true);
+    abstract public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true);
 
     abstract public function loadUrlData($id);
 
