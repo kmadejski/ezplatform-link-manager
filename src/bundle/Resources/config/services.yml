@@ -14,6 +14,7 @@ parameters:
     ezsystems.platformui.controller.link_management.class: 'EzSystems\EzPlatformLinkManagerBundle\Controller\LinkManagerController'
     ezsystems.form.type.url_list.class: 'EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLListType'
     ezsystems.form.type.url_edit.class: 'EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLEditType'
+    ezplatform.link_manager.validator.unique_url.class: 'EzSystems\EzPlatformLinkManagerBundle\Validator\Constraints\UniqueURLValidator'
 
 services:
     ezpublish.api.service.url:
@@ -88,3 +89,10 @@ services:
         class: Twig_Extensions_Extension_Text
         tags:
             - { name: twig.extension }
+
+    ezplatform.link_manager.validator.unique_url:
+        class: '%ezplatform.link_manager.validator.unique_url.class%'
+        arguments:
+            - '@ezpublish.api.service.url'
+        tags:
+            - { name: 'validator.constraint_validator', alias: 'ezplatform.link_manager.validator.unique_url' }

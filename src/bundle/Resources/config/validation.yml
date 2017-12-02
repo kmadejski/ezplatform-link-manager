@@ -1,0 +1,6 @@
+EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLUpdateData:
+    constraints:
+        - EzSystems\EzPlatformLinkManagerBundle\Validator\Constraints\UniqueURL: ~
+    properties:
+        url:
+            - NotBlank: ~

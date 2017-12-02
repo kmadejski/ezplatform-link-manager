@@ -88,6 +88,22 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
+    public function loadByUrl($url)
+    {
+        $url = $this->urlMapper->extractURLsFromRows(
+            $this->urlGateway->loadUrlDataByUrl($url)
+        );
+
+        if (count($url) < 1) {
+            throw new NotFoundException('URL', $url);
+        }
+
+        return reset($url);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRelatedContentIds($id)
     {
         $ids = $this->urlGateway->getRelatedContentIds($id);

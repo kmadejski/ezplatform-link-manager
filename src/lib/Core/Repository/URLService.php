@@ -2,6 +2,8 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Repository;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService as URLServiceInterface;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
@@ -80,6 +82,10 @@ class URLService implements URLServiceInterface
             throw new UnauthorizedException('url', 'update');
         }
 
+        if (!$this->isUnique($url->id, $struct->url)) {
+            throw new InvalidArgumentException('struct', 'url already exists');
+        }
+
         $updateStruct = $this->buildUpdateStruct($this->loadUrl($url->id), $struct);
 
         $this->repository->beginTransaction();
@@ -105,6 +111,20 @@ class URLService implements URLServiceInterface
 
         return $this->buildDomainObject(
             $this->urlHandler->load($id)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadByUrl($url)
+    {
+        if ($this->repository->hasAccess('url', 'view') !== true) {
+            throw new UnauthorizedException('url', 'view');
+        }
+
+        return $this->buildDomainObject(
+            $this->urlHandler->loadByUrl($url)
         );
     }
 
@@ -179,6 +199,23 @@ class URLService implements URLServiceInterface
         }
 
         return $updateStruct;
+    }
+
+    /**
+     * Check if URL is unique.
+     *
+     * @param int $id
+     * @param string $url
+     * @return bool
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    protected function isUnique($id, $url)
+    {
+        try {
+            return $this->loadByUrl($url)->id === $id;
+        } catch (NotFoundException $e) {
+            return true;
+        }
     }
 
     private function createDateTime($timestamp)

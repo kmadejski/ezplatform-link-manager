@@ -12,7 +12,7 @@ use PDO;
 class VisibleOnly implements CriterionHandler
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function accept(Criterion $criterion)
     {
@@ -20,7 +20,7 @@ class VisibleOnly implements CriterionHandler
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
     {

@@ -14,5 +14,7 @@ interface Handler
 
     public function load($id);
 
+    public function loadByUrl($url);
+
     public function getRelatedContentIds($id);
 }

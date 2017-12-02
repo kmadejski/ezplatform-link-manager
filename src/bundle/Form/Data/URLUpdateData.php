@@ -9,4 +9,5 @@ use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
  */
 class URLUpdateData extends URLUpdateStruct
 {
+    public $id;
 }

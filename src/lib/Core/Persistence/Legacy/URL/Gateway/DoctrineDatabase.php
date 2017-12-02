@@ -212,6 +212,25 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
+    public function loadUrlDataByUrl($url)
+    {
+        $query = $this->createSelectQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn(self::COLUMN_URL),
+                $query->bindValue($url, null, PDO::PARAM_STR)
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doCount(Criterion $criterion)
     {
         $columnName = $this->handler->quoteColumn(self::COLUMN_ID, self::URL_TABLE);

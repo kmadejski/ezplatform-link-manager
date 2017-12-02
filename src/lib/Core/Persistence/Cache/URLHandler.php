@@ -73,7 +73,6 @@ class URLHandler implements URLHandlerInterface
         $url = $this->persistenceHandler->updateUrl($id, $struct);
 
         $this->cache->clear('url', $id);
-        // TODO: Find better way to clear content cache for url usages
         $this->cache->clear('content');
 
         return $url;
@@ -108,6 +107,14 @@ class URLHandler implements URLHandlerInterface
         }
 
         return $url;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadByUrl($url)
+    {
+        return $this->persistenceHandler->loadByUrl($url);
     }
 
     /**

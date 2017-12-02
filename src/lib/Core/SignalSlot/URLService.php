@@ -72,6 +72,14 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function loadByUrl($url)
+    {
+        return $this->service->loadByUrl($url);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function updateUrl(URL $url, URLUpdateStruct $struct)
     {
         $returnValue = $this->service->updateUrl($url, $struct);

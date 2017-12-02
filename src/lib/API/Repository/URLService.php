@@ -41,7 +41,7 @@ interface URLService
     public function findUsages(URL $url, $offset = 0, $limit = -1);
 
     /**
-     * Load single URL.
+     * Load single URL (by ID).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
@@ -52,9 +52,21 @@ interface URLService
     public function loadUrl($id);
 
     /**
+     * Load single URL (by URL).
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @param string $url url
+     * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\URL
+     */
+    public function loadByUrl($url);
+
+    /**
      * Update URL.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the url already exists
      *
      * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URL $url
      * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct $struct

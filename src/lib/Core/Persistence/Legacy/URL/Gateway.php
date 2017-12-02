@@ -15,5 +15,7 @@ abstract class Gateway
 
     abstract public function loadUrlData($id);
 
+    abstract public function loadUrlDataByUrl($url);
+
     abstract public function getRelatedContentIds($id);
 }
