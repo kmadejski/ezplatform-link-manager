@@ -178,24 +178,27 @@ class URLService implements URLServiceInterface
     {
         $updateStruct = new SPIUrlUpdateStruct();
 
-        if ($data->url !== null) {
+        if ($data->url !== null && $url->url !== $data->url) {
             $updateStruct->url = $data->url;
+            // Reset URL validity
+            $updateStruct->lastChecked = 0;
+            $updateStruct->isValid = true;
         } else {
             $updateStruct->url = $url->url;
-        }
 
-        if ($data->lastChecked !== null) {
-            $updateStruct->lastChecked = $data->lastChecked->getTimestamp();
-        } elseif ($data->lastChecked !== null) {
-            $updateStruct->lastChecked = $url->lastChecked->getTimestamp();
-        } else {
-            $updateStruct->lastChecked = 0;
-        }
+            if ($data->lastChecked !== null) {
+                $updateStruct->lastChecked = $data->lastChecked->getTimestamp();
+            } elseif ($data->lastChecked !== null) {
+                $updateStruct->lastChecked = $url->lastChecked->getTimestamp();
+            } else {
+                $updateStruct->lastChecked = 0;
+            }
 
-        if ($data->isValid !== null) {
-            $updateStruct->isValid = $data->isValid;
-        } else {
-            $updateStruct->isValid = $url->isValid;
+            if ($data->isValid !== null) {
+                $updateStruct->isValid = $data->isValid;
+            } else {
+                $updateStruct->isValid = $url->isValid;
+            }
         }
 
         return $updateStruct;
