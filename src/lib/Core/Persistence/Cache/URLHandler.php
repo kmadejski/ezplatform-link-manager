@@ -4,7 +4,7 @@ namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as URLHandlerInterface;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
@@ -81,15 +81,13 @@ class URLHandler implements URLHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Criterion $criterion, $offset = 0, $limit = -1)
+    public function find(URLQuery $query)
     {
         $this->logger->logCall(__METHOD__, [
-            'criteria' => $criterion,
-            'offset' => $offset,
-            'limit' => $limit,
+            'query' => $query,
         ]);
 
-        return $this->persistenceHandler->find($criterion, $offset, $limit);
+        return $this->persistenceHandler->find($query);
     }
 
     /**

@@ -2,9 +2,9 @@
 
 namespace EzSystems\EzPlatformLinkManager\URLChecker;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 
 interface URLCheckerInterface
 {
-    public function check(Criterion $criterion, $offset = 0, $limit = -1);
+    public function check(URLQuery $query);
 }

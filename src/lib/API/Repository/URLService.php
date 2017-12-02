@@ -2,8 +2,8 @@
 
 namespace EzSystems\EzPlatformLinkManager\API\Repository;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
 
 /**
@@ -23,12 +23,10 @@ interface URLService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
-     * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion $criteria
-     * @param int $offset
-     * @param int $limit
+     * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery $query
      * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult
      */
-    public function findUrls(Criterion $criteria, $offset = 0, $limit = -1);
+    public function findUrls(URLQuery $query);
 
     /**
      * Find content objects using URL.

@@ -3,9 +3,9 @@
 namespace EzSystems\EzPlatformLinkManager\Tests\Core\Repository;
 
 use eZ\Publish\Core\Repository\Repository;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Validity;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
 use EzSystems\EzPlatformLinkManager\Core\Repository\URLService;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler;
@@ -42,14 +42,13 @@ class URLServiceTest extends TestCase
      */
     public function testFindUrlsUnauthorized()
     {
-        $criterion = new Validity();
         $this->repository
             ->expects($this->once())
             ->method('hasAccess')
             ->with('url', 'view')
             ->will($this->returnValue(false));
 
-        $this->urlService->findUrls($criterion);
+        $this->urlService->findUrls(new URLQuery());
     }
 
     /**
@@ -57,7 +56,8 @@ class URLServiceTest extends TestCase
      */
     public function testFindUrlsNonNumericOffset()
     {
-        $criterion = new Validity();
+        $query = new URLQuery();
+        $query->offset = 'foo';
 
         $this->repository
             ->expects($this->once())
@@ -65,7 +65,7 @@ class URLServiceTest extends TestCase
             ->with('url', 'view')
             ->will($this->returnValue(true));
 
-        $this->urlService->findUrls($criterion, 'foo');
+        $this->urlService->findUrls($query);
     }
 
     /**
@@ -73,7 +73,8 @@ class URLServiceTest extends TestCase
      */
     public function testFindUrlsNonNumericLimit()
     {
-        $criterion = new Validity();
+        $query = new URLQuery();
+        $query->limit = 'foo';
 
         $this->repository
             ->expects($this->once())
@@ -81,12 +82,13 @@ class URLServiceTest extends TestCase
             ->with('url', 'view')
             ->will($this->returnValue(true));
 
-        $this->urlService->findUrls($criterion, 0, 'foo');
+        $this->urlService->findUrls($query);
     }
 
     public function testFindUrls()
     {
-        $criterion = new Validity();
+        $query = new URLQuery();
+
         $url = $this->getUrl();
 
         $results = [
@@ -110,10 +112,10 @@ class URLServiceTest extends TestCase
         $this->urlHandler
             ->expects($this->once())
             ->method('find')
-            ->with($criterion)
+            ->with($query)
             ->will($this->returnValue($results));
 
-        $this->assertEquals($expected, $this->urlService->findUrls($criterion));
+        $this->assertEquals($expected, $this->urlService->findUrls($query));
     }
 
     /**

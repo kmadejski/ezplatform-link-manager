@@ -2,7 +2,8 @@
 
 namespace EzSystems\EzPlatformLinkManager\Tests\Core\Persistence\Legacy\URL;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Validity;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Handler;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Mapper;
@@ -78,7 +79,10 @@ class HandlerTest extends TestCase
 
     public function testFind()
     {
-        $criterion = new Validity();
+        $query = new URLQuery();
+        $query->filter = new Criterion\Validity();
+        $query->offset = 2;
+        $query->limit = 10;
 
         $results = [
             'count' => 0,
@@ -93,10 +97,10 @@ class HandlerTest extends TestCase
         $this->gateway
             ->expects($this->once())
             ->method('find')
-            ->with($criterion)
+            ->with($query->filter, $query->offset, $query->limit)
             ->will($this->returnValue($results));
 
-        $this->assertEquals($expected, $this->handler->find($criterion));
+        $this->assertEquals($expected, $this->handler->find($query));
     }
 
     /**

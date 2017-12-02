@@ -2,7 +2,6 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriterionHandler;
@@ -15,7 +14,7 @@ class Validity implements CriterionHandler
      */
     public function accept(Criterion $criterion)
     {
-        return $criterion instanceof Query\Validity;
+        return $criterion instanceof Criterion\Validity;
     }
 
     /**
@@ -23,7 +22,7 @@ class Validity implements CriterionHandler
      */
     public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
     {
-        /** @var Query\Validity $criterion */
+        /** @var Criterion\Validity $criterion */
         return $query->expr->eq(
             'is_valid',
             $query->bindValue($criterion->isValid)

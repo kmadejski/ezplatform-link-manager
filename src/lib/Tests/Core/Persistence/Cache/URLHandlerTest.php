@@ -4,7 +4,7 @@ namespace EzSystems\EzPlatformLinkManager\Tests\Core\Persistence\Cache;
 
 use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Validity;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
@@ -92,19 +92,16 @@ class URLHandlerTest extends TestCase
 
     public function testFind()
     {
-        $criterion = new Validity(true);
+        $query = new URLQuery();
 
         $this->logger
             ->expects($this->once())
             ->method('logCall')
-            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::find',
-                [
-                    'criteria' => $criterion,
-                    'offset' => 0,
-                    'limit' => -1,
-                ]);
+            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::find', [
+                'query' => $query,
+            ]);
 
-        $this->urlHandler->find($criterion, 0, -1);
+        $this->urlHandler->find($query);
     }
 
     public function testLoadByIdWithCache()

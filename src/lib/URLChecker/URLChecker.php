@@ -5,9 +5,9 @@ namespace EzSystems\EzPlatformLinkManager\URLChecker;
 use DateTime;
 use eZ\Publish\API\Repository\Repository;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService as URLServiceInterface;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
@@ -45,9 +45,9 @@ class URLChecker implements URLCheckerInterface
     /**
      * {@inheritdoc}
      */
-    public function check(Criterion $criterion, $offset = 0, $limit = -1)
+    public function check(URLQuery $query)
     {
-        $grouped = $this->fetchUrls($criterion, $offset, $limit);
+        $grouped = $this->fetchUrls($query);
         foreach ($grouped as $scheme => $urls) {
             if (!$this->handlerRegistry->supported($scheme)) {
                 $this->logger->error('Unsupported URL schema: ' . $scheme);
@@ -65,15 +65,13 @@ class URLChecker implements URLCheckerInterface
     /**
      * Fetch URLs to check.
      *
-     * @param Criterion $criterion
-     * @param int $offset
-     * @param int $limit
+     * @param URLQuery $query
      * @return array
      */
-    protected function fetchUrls(Criterion $criterion, $offset = 0, $limit = -1)
+    protected function fetchUrls(URLQuery $query)
     {
-        $urls = $this->repository->sudo(function () use ($criterion, $offset, $limit) {
-            return $this->urlService->findUrls($criterion, $offset, $limit);
+        $urls = $this->repository->sudo(function () use ($query) {
+            return $this->urlService->findUrls($query);
         });
 
         return $this->groupByScheme($urls);

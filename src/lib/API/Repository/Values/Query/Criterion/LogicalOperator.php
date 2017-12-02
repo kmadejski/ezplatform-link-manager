@@ -1,7 +1,8 @@
 <?php
 
-namespace EzSystems\EzPlatformLinkManager\API\Repository\Values\Query;
+namespace EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use InvalidArgumentException;
 
 abstract class LogicalOperator extends Criterion

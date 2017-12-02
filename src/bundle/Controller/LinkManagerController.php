@@ -4,8 +4,9 @@ namespace EzSystems\EzPlatformLinkManagerBundle\Controller;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query as Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion as Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Mapper\URLMapper;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLEditType;
@@ -52,7 +53,7 @@ class LinkManagerController extends Controller
         }
 
         $urls = new Pagerfanta(new URLSearchAdapter(
-            $this->buildCriteria($data),
+            $this->buildListQuery($data),
             $this->urlService
         ));
 
@@ -155,10 +156,12 @@ class LinkManagerController extends Controller
      * Builds URL criteria from list data.
      *
      * @param \EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData $data
-     * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion
+     * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery
      */
-    private function buildCriteria(URLListData $data)
+    private function buildListQuery(URLListData $data)
     {
+        $query = new URLQuery();
+
         $criteria = [
             new Criterion\VisibleOnly(),
         ];
@@ -171,6 +174,8 @@ class LinkManagerController extends Controller
             $criteria[] = new Criterion\Validity($data->status);
         }
 
-        return new Criterion\LogicalAnd($criteria);
+        $query->filter = new Criterion\LogicalAnd($criteria);
+
+        return $query;
     }
 }

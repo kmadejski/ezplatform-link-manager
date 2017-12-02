@@ -2,7 +2,7 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as HandlerInterface;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
@@ -59,9 +59,9 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Criterion $criterion, $offset = 0, $limit = -1)
+    public function find(URLQuery $query)
     {
-        $results = $this->urlGateway->find($criterion, $offset, $limit);
+        $results = $this->urlGateway->find($query->filter, $query->offset, $query->limit);
 
         return [
             'count' => $results['count'],

@@ -5,9 +5,9 @@ namespace EzSystems\EzPlatformLinkManager\Core\Repository;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService as URLServiceInterface;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as URLHandler;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL as SPIUrl;
@@ -46,21 +46,21 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findUrls(Criterion $criteria, $offset = 0, $limit = -1)
+    public function findUrls(URLQuery $query)
     {
         if ($this->repository->hasAccess('url', 'view') !== true) {
             throw new UnauthorizedException('url', 'view');
         }
 
-        if ($offset !== null && !is_numeric($offset)) {
-            throw new InvalidArgumentValue('offset', $offset);
+        if ($query->offset !== null && !is_numeric($query->offset)) {
+            throw new InvalidArgumentValue('offset', $query->offset);
         }
 
-        if ($limit !== null && !is_numeric($limit)) {
-            throw new InvalidArgumentValue('limit', $limit);
+        if ($query->limit !== null && !is_numeric($query->limit)) {
+            throw new InvalidArgumentValue('limit', $query->limit);
         }
 
-        $results = $this->urlHandler->find($criteria, $offset, $limit);
+        $results = $this->urlHandler->find($query);
 
         $items = [];
         foreach ($results['items'] as $url) {

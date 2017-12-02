@@ -2,7 +2,7 @@
 
 namespace EzSystems\EzPlatformLinkManager\SPI\Persistence\URL;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 
 interface Handler
 {
@@ -10,7 +10,7 @@ interface Handler
 
     public function updateUrl($id, URLUpdateStruct $urlUpdateStruct);
 
-    public function find(Criterion $criterion, $offset = 0, $limit = -1);
+    public function find(URLQuery $query);
 
     public function loadById($id);
 
