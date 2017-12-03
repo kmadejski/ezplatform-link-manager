@@ -45,18 +45,18 @@
                 <li>
                     <strong>{{ 'url.label.last_checked'|trans }}</strong>
                     {% if url.lastChecked %}
-                        {{ url.lastChecked | date('Y-m-d H:i') }}
+                        {{ url.lastChecked | date('d M Y, h:i') }}
                     {% else %}
                         {{ 'This URL has not been checked.' }}
                     {% endif %}
                 </li>
                 <li>
                     <strong>{{ 'url.label.created'|trans }}</strong>
-                    {{ url.created | date('Y-m-d H:i') }}
+                    {{ url.created | date('d M Y, h:i') }}
                 </li>
                 <li>
                     <strong>{{ 'url.label.modified'|trans }}</strong>
-                    {{ url.modified | date('Y-m-d H:i') }}
+                    {{ url.modified | date('d M Y, h:i') }}
                 </li>
             </ul>
 
