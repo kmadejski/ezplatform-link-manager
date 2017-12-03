@@ -29,6 +29,25 @@
     text-align: left;
 }
 
+.ezplatformlinkmanager-filter-searchquery input[type="search"] {
+    line-height: 2.2em !important;
+    height: auto !important;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 350px;
+}
+
+.ezplatformlinkmanager-filter-searchquery input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: searchfield-cancel-button !important;
+}
+
+.ezplatformlinkmanager-filter-searchquery button {
+    line-height: 2.2em !important;
+    height: auto !important;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
 .ezplatformlinkmanager-filter-status {
     float: right;
     width: 50%;

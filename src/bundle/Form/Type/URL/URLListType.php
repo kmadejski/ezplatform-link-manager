@@ -6,6 +6,7 @@ use EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\SearchType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -46,7 +47,7 @@ class URLListType extends AbstractType
             'required' => false,
         ]);
 
-        $builder->add('searchQuery', TextType::class, [
+        $builder->add('searchQuery', SearchType::class, [
             'required' => false,
             'constraints' => [
                 new Assert\Length([
