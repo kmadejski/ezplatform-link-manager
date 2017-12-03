@@ -77,7 +77,7 @@ class HTTPHandler implements URLHandlerInterface
             'timeout' => 10,
             'connection_timeout' => 5,
             'batch_size' => 10,
-            'ignore_certificate' => false
+            'ignore_certificate' => false,
         ];
     }
 
@@ -125,7 +125,7 @@ class HTTPHandler implements URLHandlerInterface
     {
         $doUpdateStatus($url, $this->isSuccessful(curl_getinfo($handler, CURLINFO_HTTP_CODE)));
     }
-    
+
     private function isSuccessful($statusCode)
     {
         return $statusCode >= 200 && $statusCode < 300;

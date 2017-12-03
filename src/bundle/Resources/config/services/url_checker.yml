@@ -9,7 +9,7 @@ services:
         class: '%ezpublish.url_checker.class%'
         arguments:
             - '@ezpublish.api.repository'
-            - '@ezpublish.api.service.url'
+            - '@ezpublish.api.service.url_inner'
             - '@ezpublish.url_checker.handler_registry'
         calls:
             - ['setLogger', ['@?logger']]
