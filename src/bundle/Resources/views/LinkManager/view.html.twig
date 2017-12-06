@@ -16,20 +16,21 @@
     } %}
 {%- endblock -%}
 
+{% block bodyClass %}ez-info-view{% endblock %}
+
 {%- block content -%}
     <section class="container mt-5">
-        <div class="btn-toolbar justify-content-end" role="toolbar">
-
-        </div>
-
-        <div class="ez-table-header mt-4">
-            <h5>{{ 'url.tab.information'|trans|desc('Details') }}</h5>
-        </div>
-
-        <table class="table">
+        <table class="table ez-table--list">
+            <thead>
+                <tr>
+                   <th colspan="2">
+                       {{ 'url.tab.information'|trans|desc('Details') }}
+                   </th>
+                </tr>
+            </thead>
             <tbody>
                 <tr>
-                    <th>{{ 'url.label.address'|trans }}</th>
+                    <td>{{ 'url.label.address'|trans }}</td>
                     <td>
                         <a href="{{ url.url }}" target="_blank">{{ url.url }}</a>
                         <a href="{{ path('admin_link_manager_edit', { urlId: url.id }) }}" class="btn btn-icon float-right">
@@ -40,11 +41,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>{{ 'url.label.status'|trans }}</th>
+                    <td>{{ 'url.label.status'|trans }}</td>
                     <td>{{ url.isValid ? 'url.status.valid'|trans : 'url.status.invalid'|trans }}</td>
                 </tr>
                 <tr>
-                    <th>{{ 'url.label.last_checked'|trans }}</th>
+                    <td>{{ 'url.label.last_checked'|trans }}</td>
                     <td>
                         {% if url.lastChecked %}
                             {{ url.lastChecked | date('M d, Y h:i:sA') }}
@@ -54,11 +55,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>{{ 'url.label.created'|trans }}</th>
+                    <td>{{ 'url.label.created'|trans }}</td>
                     <td>{{ url.created | date('M d, Y h:i:sA') }}</td>
                 </tr>
                 <tr>
-                    <th>{{ 'url.label.modified'|trans }}</th>
+                    <td>{{ 'url.label.modified'|trans }}</td>
                     <td>{{ url.modified | date('M d, Y h:i:sA') }}</td>
                 </tr>
             </tbody>
@@ -66,8 +67,10 @@
     </section>
 
     <section class="container mt-5">
-        <div class="ez-table-header">
-            <h5>{{ 'url.tab.usages'|trans({'%count%': usages.nbResults })|desc('Content item(s) using this URL') }}</h5>
+        <div class="ez-table-header round">
+            <h2 class="ez-table-header--label">
+                {{ 'url.tab.usages'|trans({'%count%': usages.nbResults })|desc('Content item(s) using this URL') }}
+            </h2>
         </div>
 
         <table class="table">
@@ -99,7 +102,7 @@
                             </a>
                         </td>
                         <td>{{ content.published ? 'Published' : 'Draft' }}</td>
-                        <td>
+                        <td class="text-right">
                             <a href="{{ edit_url }}" class="btn btn-icon">
                                 <svg class="ez-icon ez-icon-edit">
                                     <use xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#edit"></use>
@@ -111,9 +114,11 @@
             </tbody>
         </table>
 
-        <div class="row justify-content-center align-items-center">
-            {{ pagination|raw }}
-        </div>
+        {% if usages.haveToPaginate %}
+            <div class="row justify-content-center align-items-center">
+                {{ pagerfanta(usages, 'ez') }}
+            </div>
+        {% endif %}
     </section>
 {%- endblock -%}
 

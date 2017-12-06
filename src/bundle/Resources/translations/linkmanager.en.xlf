@@ -17,8 +17,8 @@
         <note>key: url.edit</note>
       </trans-unit>
       <trans-unit id="3216bb10c40d59217fdb3802bfa247639d6f1648" resname="url.edit.cancel">
-        <source>Cancel</source>
-        <target>Cancel</target>
+        <source>Discard changes</source>
+        <target>Discard changes</target>
         <note>key: url.edit.cancel</note>
       </trans-unit>
       <trans-unit id="20b1ccd57b5cd9852f5625ba80299cadc4f1b166" resname="url.edit.save">
@@ -27,8 +27,8 @@
         <note>key: url.edit.save</note>
       </trans-unit>
       <trans-unit id="e890168e1ef7753c250affa3fcdfb21074c35c6f" resname="url.editing">
-        <source>Editing URL %url%</source>
-        <target>Editing URL %url%</target>
+        <source>Editing URL: %url%</source>
+        <target>Editing URL: %url%</target>
         <note>key: url.editing</note>
       </trans-unit>
       <trans-unit id="8c27173bd289fbab90a41c921e3a0d742acd9042" resname="url.label.address">
@@ -67,9 +67,14 @@
         <note>key: url.list</note>
       </trans-unit>
       <trans-unit id="24a0b301998be73b299ac86967952ef729264dec" resname="url.list.title">
-        <source>Links</source>
-        <target>Links</target>
+        <source>Links (%count%)</source>
+        <target>Links (%count%)</target>
         <note>key: url.list.title</note>
+      </trans-unit>
+      <trans-unit id="fd026c688f943eb5d0cb4dadf54c0dac101a9b8b" resname="url.list.no_urls">
+        <source>No URLs</source>
+        <target state="new">No URLs</target>
+        <note>key: url.list.no_urls</note>
       </trans-unit>
       <trans-unit id="126d1ac5ef68809c1a2bfdd3872470d7aafaacc3" resname="url.open">
         <source>Open</source>

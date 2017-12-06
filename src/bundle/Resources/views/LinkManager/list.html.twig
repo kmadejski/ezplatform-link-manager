@@ -16,30 +16,39 @@
 {%- endblock -%}
 
 {%- block content -%}
-    <section class="container mt-5">
-        {{ form_start(form, {"attr": {"class": "form-inline"}}) }}
+    <section class="container mt-4">
+        {{ form_start(form) }}
+            <div class="row justify-content-between">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        {{ form_widget(form.searchQuery, { attr: {
+                            'placeholder': 'url.search.placeholder'|trans,
+                        }}) }}
 
-            {{ form_widget(form.searchQuery, { attr: {
-                'placeholder': 'url.search.placeholder'|trans,
-                'class': 'mb-2 mr-sm-2 mb-sm-0'
-            }}) }}
-
-            {{ form_label(form.status) }} &nbsp;
-            {{ form_widget(form.status, { attr: {
-                'class': 'mb-2 mr-sm-2 mb-sm-0'
-            }}) }}
-
-            <button class="btn btn-primary">
-                {{ 'url.search'|trans }}
-            </button>
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary">
+                                {{ 'url.search'|trans }}
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <div class="form-inline">
+                        {{ form_label(form.status) }} &nbsp;
+                        {{ form_widget(form.status) }}
+                    </div>
+                </div>
+            </div>
 
         {{ form_widget(form.page, { attr: { value: '1' }}) }}
         {{ form_end(form) }}
     </section>
 
     <section class="container mt-4">
-        <div class="ez-table-header">
-            <h5>{{ 'url.list.title'|trans|desc('Links') }}</h5>
+        <div class="ez-table-header round">
+            <h2 class="ez-table-header--label">
+                {{ 'url.list.title'|trans({ '%count%': urls.count })|desc('Links (%count%)') }}
+            </h2>
         </div>
 
         <table class="table">
@@ -58,7 +67,7 @@
                 {% set view_url = path('admin_link_manager_view', {urlId: url.id}) %}
                 <tr>
                     <td>
-                        <a href="{{ view_url }}">{{ url.url|truncate(60) }}</a>
+                        <a href="{{ view_url }}">{{ url.url|truncate(50) }}</a>
                         (<a href="{{ url.url }}" target="_blank">{{ 'url.open'|trans }}</a>)
                     </td>
                     <td>{{ url.isValid ? 'url.status.valid'|trans : 'url.status.invalid'|trans }}</td>
@@ -86,15 +95,32 @@
                         {% endif %}
                     </td>
                 </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">
+                        <p><i>{{ 'url.list.no_urls'|trans }}</i></p>
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
 
-        <div class="row justify-content-center align-items-center">
-            {{ pagination|raw }}
-        </div>
+        {% if urls.haveToPaginate %}
+            <div class="row justify-content-center align-items-center">
+                {{ pagerfanta(urls, 'ez') }}
+            </div>
+        {% endif %}
     </section>
 {%- endblock -%}
+
+{% block javascripts %}
+    {%  javascripts
+        'bundles/ezplatformlinkmanager/js/admin.linkmanager.list.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}
+
 
 {% block title %}{{ 'url.list'|trans }}{% endblock %}
 

@@ -2,41 +2,53 @@
 
 {% trans_default_domain "linkmanager" %}
 
-{%- block breadcrumbs -%}
-    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
-        { value: 'url.list'|trans, url: path('admin_link_manager_list') },
-        { value: 'url.edit'|trans }
-    ]} %}
-{%- endblock -%}
-
-{%- block pageTitle -%}
-    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
-        title: 'url.editing'|trans({'%url%': url.url|truncate(50) }),
-        iconName: 'link'
-    } %}
-{%- endblock -%}
-
 {%- block content -%}
     {{ form_start(form) }}
-    {{ form_errors(form) }}
+    <div class="row align-items-stretch ez-main-row">
+        <div class="col-sm-11 px-0 pb-4">
+            <div class="ez-header pt-4">
+                <div class="container">
+                    {% include '@EzPlatformAdminUi/parts/breadcrumbs.html.twig' with { items: [
+                        { value: 'url.list'|trans, url: path('admin_link_manager_list') },
+                        { value: 'url.edit'|trans }
+                    ]} %}
 
-    <section class="container mt-4">
-        <div class="card">
-            <div class="card-body">
-                {{ form_row(form.url) }}
+                    {% include '@EzPlatformAdminUi/parts/page_title.html.twig' with {
+                        title: 'url.editing'|trans({'%url%': url.url|truncate(50) }),
+                        iconName: 'link'
+                    } %}
+                </div>
+            </div>
+
+            <div class="container px-0 pb-4 mt-5">
+                {{ form_errors(form) }}
+
+                <section class="container mt-4">
+                    <div class="card ez-card__form">
+                        <div class="card-body">
+                            {{ form_row(form.url) }}
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
-    </section>
+        <div class="col-sm-1 pt-4 bg-secondary ez-context-menu">
+            <button class="btn btn-secondary btn-block" type="submit">
+                <svg class="ez-icon ez-icon-save">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#save"></use>
+                </svg>
 
-    <section class="container mt-4 mb-4">
-        <div class="btn-toolbar justify-content-end" role="toolbar" >
-            <a href="{{ path('admin_link_manager_list') }}" class="btn btn-default">
-                {{ 'url.edit.cancel'|trans|desc("Cancel") }}
-            </a>
-            <button class="btn btn-primary">
                 {{ 'url.edit.save'|trans|desc('Save') }}
             </button>
+
+            <a class="btn btn-secondary btn-block" href="{{ path('admin_link_manager_view', { urlId: url.id }) }}">
+                <svg class="ez-icon ez-icon-circle-close">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{{ asset('bundles/ezplatformadminui/img/ez-icons.svg') }}#circle-close"></use>
+                </svg>
+
+                {{ 'url.edit.cancel'|trans|desc("Cancel") }}
+            </a>
         </div>
-    </section>
+    </div>
     {{ form_end(form) }}
 {%- endblock -%}
