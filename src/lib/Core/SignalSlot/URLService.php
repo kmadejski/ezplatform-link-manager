@@ -4,8 +4,8 @@ namespace EzSystems\EzPlatformLinkManager\Core\SignalSlot;
 
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService as URLServiceInterface;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
 use EzSystems\EzPlatformLinkManager\Core\SignalSlot\Signal\UpdateUrlSignal;
 
@@ -48,9 +48,9 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findUrls(Criterion $criteria, $offset = 0, $limit = -1)
+    public function findUrls(URLQuery $query)
     {
-        return $this->service->findUrls($criteria, $offset, $limit);
+        return $this->service->findUrls($query);
     }
 
     /**
@@ -64,9 +64,17 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadUrl($id)
+    public function loadById($id)
     {
-        return $this->service->loadUrl($id);
+        return $this->service->loadById($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadByUrl($url)
+    {
+        return $this->service->loadByUrl($url);
     }
 
     /**

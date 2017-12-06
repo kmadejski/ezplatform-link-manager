@@ -14,6 +14,7 @@ class URLMapper implements FormDataMapperInterface
     public function mapToFormData(ValueObject $value, array $params = [])
     {
         $data = new URLUpdateData();
+        $data->id = $value->id;
         $data->url = $value->url;
 
         return $data;

@@ -2,7 +2,7 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as HandlerInterface;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
@@ -59,9 +59,14 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function find(Criterion $criterion, $offset = 0, $limit = -1)
+    public function find(URLQuery $query)
     {
-        $results = $this->urlGateway->find($criterion, $offset, $limit);
+        $results = $this->urlGateway->find(
+            $query->filter,
+            $query->offset,
+            $query->limit,
+            $query->sortClauses
+        );
 
         return [
             'count' => $results['count'],
@@ -72,7 +77,7 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function load($id)
+    public function loadById($id)
     {
         $url = $this->urlMapper->extractURLsFromRows(
             $this->urlGateway->loadUrlData($id)
@@ -80,6 +85,22 @@ class Handler implements HandlerInterface
 
         if (count($url) < 1) {
             throw new NotFoundException('URL', $id);
+        }
+
+        return reset($url);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadByUrl($url)
+    {
+        $url = $this->urlMapper->extractURLsFromRows(
+            $this->urlGateway->loadUrlDataByUrl($url)
+        );
+
+        if (count($url) < 1) {
+            throw new NotFoundException('URL', $url);
         }
 
         return reset($url);

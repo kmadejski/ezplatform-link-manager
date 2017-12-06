@@ -5,8 +5,10 @@ namespace EzSystems\EzPlatformLinkManagerBundle\Controller;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use EzSystems\EzPlatformAdminUi\Notification\NotificationHandlerInterface;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query as Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion as Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\SortClause as SortClause;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Mapper\URLMapper;
 use EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLEditType;
@@ -69,7 +71,7 @@ class LinkManagerController extends Controller
         }
 
         $urls = new Pagerfanta(new URLSearchAdapter(
-            $this->buildCriteria($data),
+            $this->buildListQuery($data),
             $this->urlService
         ));
 
@@ -99,7 +101,7 @@ class LinkManagerController extends Controller
      */
     public function editAction(Request $request, $urlId)
     {
-        $url = $this->urlService->loadUrl($urlId);
+        $url = $this->urlService->loadById($urlId);
 
         $form = $this->createEditForm($url);
         $form->handleRequest($request);
@@ -134,7 +136,7 @@ class LinkManagerController extends Controller
      */
     public function viewAction(Request $request, $urlId)
     {
-        $url = $this->urlService->loadUrl($urlId);
+        $url = $this->urlService->loadById($urlId);
 
         $usages = new Pagerfanta(new URLUsagesAdapter($url, $this->urlService));
         $usages->setCurrentPage($request->query->getInt('page', 1));
@@ -192,11 +194,19 @@ class LinkManagerController extends Controller
      * Builds URL criteria from list data.
      *
      * @param \EzSystems\EzPlatformLinkManagerBundle\Form\Data\URLListData $data
-     * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion
+     * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery
      */
-    private function buildCriteria(URLListData $data)
+    private function buildListQuery(URLListData $data)
     {
-        $criteria = [];
+        $query = new URLQuery();
+        $query->sortClauses = [
+            new SortClause\URL(),
+        ];
+
+        $criteria = [
+            new Criterion\VisibleOnly(),
+        ];
+
         if ($data->searchQuery !== null) {
             $criteria[] = new Criterion\Pattern($data->searchQuery);
         }
@@ -205,10 +215,8 @@ class LinkManagerController extends Controller
             $criteria[] = new Criterion\Validity($data->status);
         }
 
-        if (empty($criteria)) {
-            return new Criterion\MatchAll();
-        }
+        $query->filter = new Criterion\LogicalAnd($criteria);
 
-        return new Criterion\LogicalAnd($criteria);
+        return $query;
     }
 }

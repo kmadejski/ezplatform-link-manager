@@ -2,7 +2,9 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway;
 
+use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\SortClause;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Query\CriteriaConverter;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
@@ -51,7 +53,7 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function find(Criterion $criterion, $offset, $limit, $doCount = true)
+    public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true)
     {
         $count = $doCount ? $this->doCount($criterion) : null;
         if (!$doCount && $limit === 0) {
@@ -68,6 +70,17 @@ class DoctrineDatabase extends Gateway
         $query = $this->createSelectQuery();
         $query->where($this->criteriaConverter->convertCriteria($query, $criterion));
         $query->limit($limit > 0 ? $limit : PHP_INT_MAX, $offset);
+
+        foreach ($sortClauses as $sortClause) {
+            $column = $this->handler->quoteColumn($sortClause->target, self::URL_TABLE);
+
+            $direction = SelectQuery::ASC;
+            if ($sortClause->direction === SortClause::SORT_DESC) {
+                $direction = SelectQuery::DESC;
+            }
+
+            $query->orderBy($column, $direction);
+        }
 
         $statement = $query->prepare();
         $statement->execute();
@@ -200,6 +213,25 @@ class DoctrineDatabase extends Gateway
             $query->expr->eq(
                 $this->handler->quoteColumn(self::COLUMN_ID),
                 $query->bindValue($id, null, PDO::PARAM_INT)
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUrlDataByUrl($url)
+    {
+        $query = $this->createSelectQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn(self::COLUMN_URL),
+                $query->bindValue($url, null, PDO::PARAM_STR)
             )
         );
 

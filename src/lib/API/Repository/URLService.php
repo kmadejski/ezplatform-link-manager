@@ -2,8 +2,8 @@
 
 namespace EzSystems\EzPlatformLinkManager\API\Repository;
 
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
 
 /**
@@ -23,12 +23,10 @@ interface URLService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      *
-     * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion $criteria
-     * @param int $offset
-     * @param int $limit
+     * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery $query
      * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult
      */
-    public function findUrls(Criterion $criteria, $offset = 0, $limit = -1);
+    public function findUrls(URLQuery $query);
 
     /**
      * Find content objects using URL.
@@ -41,7 +39,7 @@ interface URLService
     public function findUsages(URL $url, $offset = 0, $limit = -1);
 
     /**
-     * Load single URL.
+     * Load single URL (by ID).
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
@@ -49,12 +47,24 @@ interface URLService
      * @param int $id ID of URL
      * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\URL
      */
-    public function loadUrl($id);
+    public function loadById($id);
+
+    /**
+     * Load single URL (by URL).
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @param string $url url
+     * @return \EzSystems\EzPlatformLinkManager\API\Repository\Values\URL
+     */
+    public function loadByUrl($url);
 
     /**
      * Update URL.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the url already exists
      *
      * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URL $url
      * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct $struct

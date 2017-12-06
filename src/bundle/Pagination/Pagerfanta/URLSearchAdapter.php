@@ -3,15 +3,15 @@
 namespace EzSystems\EzPlatformLinkManagerBundle\Pagination\Pagerfanta;
 
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use Pagerfanta\Adapter\AdapterInterface;
 
 class URLSearchAdapter implements AdapterInterface
 {
     /**
-     * @var \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion
+     * @var \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery
      */
-    private $criterion;
+    private $query;
 
     /**
      * @var \EzSystems\EzPlatformLinkManager\API\Repository\URLService
@@ -21,12 +21,12 @@ class URLSearchAdapter implements AdapterInterface
     /**
      * UrlSearchAdapter constructor.
      *
-     * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion $criterion
+     * @param \EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery $query
      * @param \EzSystems\EzPlatformLinkManager\API\Repository\URLService $urlService
      */
-    public function __construct(Criterion $criterion, URLService $urlService)
+    public function __construct(URLQuery $query, URLService $urlService)
     {
-        $this->criterion = $criterion;
+        $this->query = $query;
         $this->urlService = $urlService;
     }
 
@@ -35,7 +35,11 @@ class URLSearchAdapter implements AdapterInterface
      */
     public function getNbResults()
     {
-        return $this->urlService->findUrls($this->criterion, 0, 0)->count;
+        $query = clone $this->query;
+        $query->offset = 0;
+        $query->limit = 0;
+
+        return $this->urlService->findUrls($this->query)->count;
     }
 
     /**
@@ -43,6 +47,10 @@ class URLSearchAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        return $this->urlService->findUrls($this->criterion, $offset, $length)->items;
+        $query = clone $this->query;
+        $query->offset = $offset;
+        $query->limit = $length;
+
+        return $this->urlService->findUrls($query)->items;
     }
 }

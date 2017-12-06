@@ -2,10 +2,12 @@
 
 namespace EzSystems\EzPlatformLinkManager\Core\Repository;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService as URLServiceInterface;
-use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLUpdateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as URLHandler;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL as SPIUrl;
@@ -44,21 +46,21 @@ class URLService implements URLServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function findUrls(Criterion $criteria, $offset = 0, $limit = -1)
+    public function findUrls(URLQuery $query)
     {
         if ($this->repository->hasAccess('url', 'view') !== true) {
             throw new UnauthorizedException('url', 'view');
         }
 
-        if ($offset !== null && !is_numeric($offset)) {
-            throw new InvalidArgumentValue('offset', $offset);
+        if ($query->offset !== null && !is_numeric($query->offset)) {
+            throw new InvalidArgumentValue('offset', $query->offset);
         }
 
-        if ($limit !== null && !is_numeric($limit)) {
-            throw new InvalidArgumentValue('limit', $limit);
+        if ($query->limit !== null && !is_numeric($query->limit)) {
+            throw new InvalidArgumentValue('limit', $query->limit);
         }
 
-        $results = $this->urlHandler->find($criteria, $offset, $limit);
+        $results = $this->urlHandler->find($query);
 
         $items = [];
         foreach ($results['items'] as $url) {
@@ -80,7 +82,11 @@ class URLService implements URLServiceInterface
             throw new UnauthorizedException('url', 'update');
         }
 
-        $updateStruct = $this->buildUpdateStruct($this->loadUrl($url->id), $struct);
+        if (!$this->isUnique($url->id, $struct->url)) {
+            throw new InvalidArgumentException('struct', 'url already exists');
+        }
+
+        $updateStruct = $this->buildUpdateStruct($this->loadById($url->id), $struct);
 
         $this->repository->beginTransaction();
         try {
@@ -91,20 +97,34 @@ class URLService implements URLServiceInterface
             throw $e;
         }
 
-        return $this->loadUrl($url->id);
+        return $this->loadById($url->id);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadUrl($id)
+    public function loadById($id)
     {
         if ($this->repository->hasAccess('url', 'view') !== true) {
             throw new UnauthorizedException('url', 'view');
         }
 
         return $this->buildDomainObject(
-            $this->urlHandler->load($id)
+            $this->urlHandler->loadById($id)
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadByUrl($url)
+    {
+        if ($this->repository->hasAccess('url', 'view') !== true) {
+            throw new UnauthorizedException('url', 'view');
+        }
+
+        return $this->buildDomainObject(
+            $this->urlHandler->loadByUrl($url)
         );
     }
 
@@ -121,13 +141,17 @@ class URLService implements URLServiceInterface
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1)
     {
+        $usages = $this->urlHandler->getRelatedContentIds($url->id);
+
         $query = new Query();
-        $query->filter = new ContentCriterion\LogicalAnd([
-            new ContentCriterion\ContentId(
-                $this->urlHandler->getRelatedContentIds($url->id)
-            ),
-            new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
-        ]);
+        if (!empty($usages)) {
+            $query->filter = new ContentCriterion\LogicalAnd([
+                new ContentCriterion\ContentId($usages),
+                new ContentCriterion\Visibility(ContentCriterion\Visibility::VISIBLE),
+            ]);
+        } else {
+            $query->filter = new ContentCriterion\MatchNone();
+        }
 
         $query->offset = $offset;
         if ($limit > -1) {
@@ -154,27 +178,47 @@ class URLService implements URLServiceInterface
     {
         $updateStruct = new SPIUrlUpdateStruct();
 
-        if ($data->url !== null) {
+        if ($data->url !== null && $url->url !== $data->url) {
             $updateStruct->url = $data->url;
+            // Reset URL validity
+            $updateStruct->lastChecked = 0;
+            $updateStruct->isValid = true;
         } else {
             $updateStruct->url = $url->url;
-        }
 
-        if ($data->lastChecked !== null) {
-            $updateStruct->lastChecked = $data->lastChecked->getTimestamp();
-        } elseif ($data->lastChecked !== null) {
-            $updateStruct->lastChecked = $url->lastChecked->getTimestamp();
-        } else {
-            $updateStruct->lastChecked = 0;
-        }
+            if ($data->lastChecked !== null) {
+                $updateStruct->lastChecked = $data->lastChecked->getTimestamp();
+            } elseif ($data->lastChecked !== null) {
+                $updateStruct->lastChecked = $url->lastChecked->getTimestamp();
+            } else {
+                $updateStruct->lastChecked = 0;
+            }
 
-        if ($data->isValid !== null) {
-            $updateStruct->isValid = $data->isValid;
-        } else {
-            $updateStruct->isValid = $url->isValid;
+            if ($data->isValid !== null) {
+                $updateStruct->isValid = $data->isValid;
+            } else {
+                $updateStruct->isValid = $url->isValid;
+            }
         }
 
         return $updateStruct;
+    }
+
+    /**
+     * Check if URL is unique.
+     *
+     * @param int $id
+     * @param string $url
+     * @return bool
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    protected function isUnique($id, $url)
+    {
+        try {
+            return $this->loadByUrl($url)->id === $id;
+        } catch (NotFoundException $e) {
+            return true;
+        }
     }
 
     private function createDateTime($timestamp)

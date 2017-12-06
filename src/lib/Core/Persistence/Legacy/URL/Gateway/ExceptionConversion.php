@@ -59,10 +59,10 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function find(Criterion $criterion, $offset, $limit, $doCount = true)
+    public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true)
     {
         try {
-            return $this->innerGateway->find($criterion, $offset, $limit, $doCount);
+            return $this->innerGateway->find($criterion, $offset, $limit, $sortClauses, $doCount);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -77,6 +77,20 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadUrlData($id);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUrlDataByUrl($url)
+    {
+        try {
+            return $this->innerGateway->loadUrlDataByUrl($url);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

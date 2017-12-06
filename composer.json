@@ -13,9 +13,9 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.1",
-    "ezsystems/ezpublish-kernel": "^7.0@beta",
-    "ezsystems/repository-forms": "^2.0@beta",
-    "ezsystems/ezplatform-admin-ui": "^1.0@beta",
+    "ezsystems/ezpublish-kernel": "^7.0@dev",
+    "ezsystems/repository-forms": "^2.0@dev",
+    "ezsystems/ezplatform-admin-ui": "^1.0@dev",
     "twig/extensions": "^1.5@dev"
   },
   "require-dev": {

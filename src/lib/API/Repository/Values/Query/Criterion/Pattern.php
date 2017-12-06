@@ -1,6 +1,6 @@
 <?php
 
-namespace EzSystems\EzPlatformLinkManager\API\Repository\Values\Query;
+namespace EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 
 class Pattern extends Matcher
 {

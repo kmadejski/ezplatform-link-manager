@@ -1,5 +1,6 @@
 imports:
     - { resource: services/criterion_handlers.yml }
+    - { resource: services/url_checker.yml }
 
 parameters:
     ezpublish.api.service.url_inner.class: 'EzSystems\EzPlatformLinkManager\Core\Repository\URLService'
@@ -13,6 +14,8 @@ parameters:
     ezsystems.platformui.controller.link_management.class: 'EzSystems\EzPlatformLinkManagerBundle\Controller\LinkManagerController'
     ezsystems.form.type.url_list.class: 'EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLListType'
     ezsystems.form.type.url_edit.class: 'EzSystems\EzPlatformLinkManagerBundle\Form\Type\URL\URLEditType'
+    ezplatform.link_manager.validator.unique_url.class: 'EzSystems\EzPlatformLinkManagerBundle\Validator\Constraints\UniqueURLValidator'
+    ezpublish.http_cache.signalslot.update_url.class: 'EzSystems\EzPlatformLinkManager\Core\MVC\Symfony\Http\SignalSlot\UpdateUrlSlot'
 
 services:
     ezpublish.api.service.url:
@@ -88,3 +91,17 @@ services:
         class: '%ezsystems.form.type.url_edit.class%'
         tags:
             - { name: 'form.type', alias: 'ezplatformlinkmanager_url_edit' }
+
+    ezplatform.link_manager.validator.unique_url:
+        class: '%ezplatform.link_manager.validator.unique_url.class%'
+        arguments:
+            - '@ezpublish.api.service.url'
+        tags:
+            - { name: 'validator.constraint_validator', alias: 'ezplatform.link_manager.validator.unique_url' }
+
+    ezpublish.http_cache.signalslot.update_url:
+        class: '%ezpublish.http_cache.signalslot.update_url.class%'
+        arguments:
+            - '@ezpublish.http_cache.purger'
+        tags:
+            - { name: ezpublish.api.slot, signal: URLService\UpdateUrlSignal }
