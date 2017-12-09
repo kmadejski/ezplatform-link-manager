@@ -59,5 +59,7 @@ class VisibleOnly implements CriterionHandler
                     $query->bindValue(0, null, PDO::PARAM_INT)
                 )
             );
+
+        return $subSelect;
     }
 }
