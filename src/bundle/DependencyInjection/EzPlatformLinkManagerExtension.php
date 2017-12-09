@@ -2,6 +2,8 @@
 
 namespace EzSystems\EzPlatformLinkManagerBundle\DependencyInjection;
 
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ConfigurationProcessor;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\ContextualizerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,6 +21,17 @@ class EzPlatformLinkManagerExtension extends Extension implements PrependExtensi
     {
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+        $loader->load('default_settings.yml');
+
+        $configuration = $this->getConfiguration($configs, $container);
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $processor = new ConfigurationProcessor($container, 'ez_platform_link_manager');
+        $processor->mapConfig($config, function ($scopeSettings, $currentScope, ContextualizerInterface $contextualizer) use ($container) {
+            foreach ($scopeSettings['handlers'] as $name => $options) {
+                $contextualizer->setContextualParameter('url_handler.' . $name . '.options', $currentScope, $options);
+            }
+        });
     }
 
     /**

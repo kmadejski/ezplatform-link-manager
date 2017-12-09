@@ -1,0 +1,12 @@
+parameters:
+    ez_platform_link_manager.default.url_handler.http.options:
+        timeout: 10
+        connection_timeout: 5
+        batch_size: 25
+        ignore_certificate: false
+    ez_platform_link_manager.default.url_handler.https.options:
+        timeout: 10
+        connection_timeout: 5
+        batch_size: 25
+        ignore_certificate: false
+    ez_platform_link_manager.default.url_handler.mailto.options: {}
