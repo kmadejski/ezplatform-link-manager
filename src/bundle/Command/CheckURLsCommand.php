@@ -42,6 +42,8 @@ class CheckURLsCommand extends ContainerAwareCommand
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$limit}'");
         }
 
+        $repository = $this->getContainer()->get('ezpublish.api.repository');
+
         $query = new URLQuery();
         $query->filter = new Criterion\VisibleOnly();
         $query->sortClauses = [
@@ -55,7 +57,10 @@ class CheckURLsCommand extends ContainerAwareCommand
         $progress = new ProgressBar($output, $totalCount);
         $progress->start();
         while ($query->offset < $totalCount) {
-            $this->getUrlHandler()->check($query);
+            $repository->sudo(function () use ($query) {
+                $this->getUrlHandler()->check($query);
+            });
+
             $progress->advance(min($limit, $totalCount - $query->offset));
             $query->offset += $limit;
         }

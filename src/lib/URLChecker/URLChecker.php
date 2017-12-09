@@ -3,7 +3,6 @@
 namespace EzSystems\EzPlatformLinkManager\URLChecker;
 
 use DateTime;
-use eZ\Publish\API\Repository\Repository;
 use EzSystems\EzPlatformLinkManager\API\Repository\URLService as URLServiceInterface;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\SearchResult;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
@@ -14,9 +13,6 @@ use Psr\Log\NullLogger;
 class URLChecker implements URLCheckerInterface
 {
     use LoggerAwareTrait;
-
-    /** @var \eZ\Publish\API\Repository\Repository */
-    protected $repository;
 
     /** @var \EzSystems\EzPlatformLinkManager\API\Repository\URLService */
     protected $urlService;
@@ -32,11 +28,9 @@ class URLChecker implements URLCheckerInterface
      * @param \EzSystems\EzPlatformLinkManager\URLChecker\URLHandlerRegistryInterface $handlerRegistry
      */
     public function __construct(
-        Repository $repository,
         URLServiceInterface $urlService,
         URLHandlerRegistryInterface $handlerRegistry)
     {
-        $this->repository = $repository;
         $this->urlService = $urlService;
         $this->handlerRegistry = $handlerRegistry;
         $this->logger = new NullLogger();
@@ -70,11 +64,9 @@ class URLChecker implements URLCheckerInterface
      */
     protected function fetchUrls(URLQuery $query)
     {
-        $urls = $this->repository->sudo(function () use ($query) {
-            return $this->urlService->findUrls($query);
-        });
-
-        return $this->groupByScheme($urls);
+        return $this->groupByScheme(
+            $this->urlService->findUrls($query)
+        );
     }
 
     /**
@@ -85,13 +77,11 @@ class URLChecker implements URLCheckerInterface
      */
     protected function setUrlStatus(URL $url, $isValid)
     {
-        $this->repository->sudo(function () use ($url, $isValid) {
-            $updateStruct = $this->urlService->createUpdateStruct();
-            $updateStruct->isValid = $isValid;
-            $updateStruct->lastChecked = new DateTime();
+        $updateStruct = $this->urlService->createUpdateStruct();
+        $updateStruct->isValid = $isValid;
+        $updateStruct->lastChecked = new DateTime();
 
-            $this->urlService->updateUrl($url, $updateStruct);
-        });
+        $this->urlService->updateUrl($url, $updateStruct);
     }
 
     /**
