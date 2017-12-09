@@ -23,6 +23,17 @@ class VisibleOnly implements CriterionHandler
      */
     public function handle(CriteriaConverter $converter, SelectQuery $query, Criterion $criterion)
     {
+        return $query->expr->in('ezurl.id', $this->getVisibleOnlySubQuery($query));
+    }
+
+    /**
+     * Generate query that selects ids of visible URLs.
+     *
+     * @param SelectQuery $query
+     * @return string
+     */
+    protected function getVisibleOnlySubQuery(SelectQuery $query)
+    {
         // TODO: The following query requires optimization
         $subSelect = $query->subSelect();
         $subSelect
@@ -48,7 +59,5 @@ class VisibleOnly implements CriterionHandler
                     $query->bindValue(0, null, PDO::PARAM_INT)
                 )
             );
-
-        return $query->expr->in('ezurl.id', $subSelect);
     }
 }
