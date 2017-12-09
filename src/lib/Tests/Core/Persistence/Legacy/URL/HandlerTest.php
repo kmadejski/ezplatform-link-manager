@@ -3,6 +3,7 @@
 namespace EzSystems\EzPlatformLinkManager\Tests\Core\Persistence\Legacy\URL;
 
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\SortClause;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Handler;
@@ -15,12 +16,12 @@ use PHPUnit\Framework\TestCase;
 class HandlerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway|\PHPUnit_Framework_MockObject_MockObject
      */
     private $gateway;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Mapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mapper;
 
@@ -41,19 +42,19 @@ class HandlerTest extends TestCase
     {
         $urlCreateStruct = new URLCreateStruct();
 
-        $url = $this->getUrl();
+        $url = $this->getUrl(1, 'http://ez.no');
 
         $this->mapper
             ->expects($this->once())
             ->method('createURLFromCreateStruct')
             ->with($urlCreateStruct)
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->gateway
             ->expects($this->once())
             ->method('insertUrl')
             ->with($url)
-            ->will($this->returnValue($url->id));
+            ->willReturn($url->id);
 
         $this->assertEquals($url, $this->handler->createUrl($urlCreateStruct));
     }
@@ -61,13 +62,13 @@ class HandlerTest extends TestCase
     public function testUpdateUrl()
     {
         $urlUpdateStruct = new URLUpdateStruct();
-        $url = $this->getUrl();
+        $url = $this->getUrl(1, 'http://ez.no');
 
         $this->mapper
             ->expects($this->once())
             ->method('createURLFromUpdateStruct')
             ->with($urlUpdateStruct)
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->gateway
             ->expects($this->once())
@@ -81,24 +82,40 @@ class HandlerTest extends TestCase
     {
         $query = new URLQuery();
         $query->filter = new Criterion\Validity();
+        $query->sortClauses = [
+            new SortClause\Id(),
+        ];
         $query->offset = 2;
         $query->limit = 10;
 
         $results = [
-            'count' => 0,
-            'rows' => [],
+            'count' => 1,
+            'rows' => [
+                [
+                    'id' => 1,
+                    'url' => 'http://ez.no',
+                ],
+            ],
         ];
 
         $expected = [
-            'count' => 0,
-            'items' => null,
+            'count' => 1,
+            'items' => [
+                $this->getUrl(1, 'http://ez.no'),
+            ],
         ];
 
         $this->gateway
             ->expects($this->once())
             ->method('find')
-            ->with($query->filter, $query->offset, $query->limit)
-            ->will($this->returnValue($results));
+            ->with($query->filter, $query->offset, $query->limit, $query->sortClauses)
+            ->willReturn($results);
+
+        $this->mapper
+            ->expects($this->once())
+            ->method('extractURLsFromRows')
+            ->with($results['rows'])
+            ->willReturn($expected['items']);
 
         $this->assertEquals($expected, $this->handler->find($query));
     }
@@ -106,43 +123,82 @@ class HandlerTest extends TestCase
     /**
      * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function testLoadWithoutUrlData()
+    public function testLoadByIdWithoutUrlData()
     {
-        $url = $this->getUrl();
-
-        $rows = [];
+        $id = 1;
 
         $this->gateway
             ->expects($this->once())
             ->method('loadUrlData')
-            ->with($url->id)
-            ->will($this->returnValue($rows));
-
-        $this->mapper
-            ->expects($this->once())
-            ->method('extractURLsFromRows')
-            ->with($rows);
-
-        $this->handler->loadById($url->id);
-    }
-
-    public function testLoadWithUrlData()
-    {
-        $urls[] = $this->getUrl();
-
-        $this->gateway
-            ->expects($this->once())
-            ->method('loadUrlData')
-            ->with($urls[0]->id)
-            ->will($this->returnValue([]));
+            ->with($id)
+            ->willReturn([]);
 
         $this->mapper
             ->expects($this->once())
             ->method('extractURLsFromRows')
             ->with([])
-            ->will($this->returnValue($urls));
+            ->willReturn([]);
 
-        $this->assertEquals($urls[0], $this->handler->loadById($urls[0]->id));
+        $this->handler->loadById($id);
+    }
+
+    public function testLoadByIdWithUrlData()
+    {
+        $url = $this->getUrl(1, 'http://ez.no');
+
+        $this->gateway
+            ->expects($this->once())
+            ->method('loadUrlData')
+            ->with($url->id)
+            ->willReturn([$url]);
+
+        $this->mapper
+            ->expects($this->once())
+            ->method('extractURLsFromRows')
+            ->with([$url])
+            ->willReturn([$url]);
+
+        $this->assertEquals($url, $this->handler->loadById($url->id));
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function testLoadByUrlWithoutUrlData()
+    {
+        $url = 'http://ez.no';
+
+        $this->gateway
+            ->expects($this->once())
+            ->method('loadUrlDataByUrl')
+            ->with($url)
+            ->willReturn([]);
+
+        $this->mapper
+            ->expects($this->once())
+            ->method('extractURLsFromRows')
+            ->with([]);
+
+        $this->handler->loadByUrl($url);
+    }
+
+    public function testLoadByUrlWithUrlData()
+    {
+        $url = $this->getUrl(1, 'http://ez.no');
+
+        $this->gateway
+            ->expects($this->once())
+            ->method('loadUrlDataByUrl')
+            ->with($url->url)
+            ->willReturn([$url]);
+
+        $this->mapper
+            ->expects($this->once())
+            ->method('extractURLsFromRows')
+            ->with([$url])
+            ->willReturn([$url]);
+
+        $this->assertEquals($url, $this->handler->loadByUrl($url->url));
     }
 
     public function testGetRelatedContentIds()
@@ -159,10 +215,11 @@ class HandlerTest extends TestCase
         $this->assertEquals($ids, $this->handler->getRelatedContentIds($url->id));
     }
 
-    private function getUrl()
+    private function getUrl($id = 1, $urlAddr = 'http://ez.no')
     {
         $url = new URL();
-        $url->id = 12;
+        $url->id = $id;
+        $url->url = $url;
 
         return $url;
     }
