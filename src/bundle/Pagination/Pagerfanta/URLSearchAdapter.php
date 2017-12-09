@@ -39,7 +39,7 @@ class URLSearchAdapter implements AdapterInterface
         $query->offset = 0;
         $query->limit = 0;
 
-        return $this->urlService->findUrls($this->query)->count;
+        return $this->urlService->findUrls($query)->count;
     }
 
     /**
