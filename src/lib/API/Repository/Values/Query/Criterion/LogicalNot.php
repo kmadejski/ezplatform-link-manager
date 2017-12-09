@@ -2,6 +2,8 @@
 
 namespace EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
 
+use EzSystems\EzPlatformLinkManager\API\Repository\Values\Query\Criterion;
+
 class LogicalNot extends LogicalOperator
 {
     /**
