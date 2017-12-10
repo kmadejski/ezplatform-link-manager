@@ -11,4 +11,11 @@ interface URLHandlerInterface
      * @param callable $doUpdateStatus Callable executed to update URL status
      */
     public function validate(array $urls, callable $doUpdateStatus);
+
+    /**
+     * Set handler options.
+     *
+     * @param array|null $options
+     */
+    public function setOptions(array $options = null);
 }

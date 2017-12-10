@@ -6,6 +6,7 @@ use EzSystems\EzPlatformLinkManager\API\Repository\Values\URL;
 use EzSystems\EzPlatformLinkManager\URLChecker\URLHandlerInterface;
 use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class HTTPHandler implements URLHandlerInterface
 {
@@ -16,12 +17,10 @@ class HTTPHandler implements URLHandlerInterface
 
     /**
      * HttpHandler constructor.
-     *
-     * @param array $options
      */
-    public function __construct(array $options = [])
+    public function __construct()
     {
-        $this->options = array_merge($this->getDefaultOptions(), $options);
+        $this->options = $this->getOptionsResolver()->resolve();
         $this->logger = new NullLogger();
     }
 
@@ -32,6 +31,10 @@ class HTTPHandler implements URLHandlerInterface
      */
     public function validate(array $urls, callable $doUpdateStatus)
     {
+        if (!$this->options['enabled']) {
+            return;
+        }
+
         $master = curl_multi_init();
         $handlers = [];
 
@@ -67,18 +70,40 @@ class HTTPHandler implements URLHandlerInterface
     }
 
     /**
-     * Returns defaults settings.
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getDefaultOptions()
+    public function setOptions(array $options = null)
     {
-        return [
+        if ($options === null) {
+            $options = [];
+        }
+
+        $this->options = $this->getOptionsResolver()->resolve($options);
+    }
+
+    /**
+     * Returns options resolver.
+     *
+     * @return OptionsResolver
+     */
+    protected function getOptionsResolver()
+    {
+        $resolver = new OptionsResolver();
+        $resolver->setDefaults([
+            'enabled' => true,
             'timeout' => 10,
             'connection_timeout' => 5,
             'batch_size' => 10,
             'ignore_certificate' => false,
-        ];
+        ]);
+
+        $resolver->setAllowedTypes('enabled', 'bool');
+        $resolver->setAllowedTypes('timeout', 'int');
+        $resolver->setAllowedTypes('connection_timeout', 'int');
+        $resolver->setAllowedTypes('batch_size', 'int');
+        $resolver->setAllowedTypes('ignore_certificate', 'bool');
+
+        return $resolver;
     }
 
     /**

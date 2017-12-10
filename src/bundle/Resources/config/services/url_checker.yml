@@ -20,6 +20,7 @@ services:
     ezpublish.url_checker.handler.http:
         class: '%ezpublish.url_checker.handler.http.class%'
         calls:
+            - ['setOptions', ['$url_handler.http.options;ez_platform_link_manager$']]
             - ['setLogger', ['@?logger']]
         tags:
             - { name: url_checker, scheme: http }
@@ -27,11 +28,15 @@ services:
     ezpublish.url_checker.handler.https:
         class: '%ezpublish.url_checker.handler.http.class%'
         calls:
+            - ['setOptions', ['$url_handler.https.options;ez_platform_link_manager$']]
             - ['setLogger', ['@?logger']]
+
         tags:
             - { name: url_checker, scheme: https }
 
     ezpublish.url_checker.handler.mailto:
         class: '%ezpublish.url_checker.handler.mailto.class%'
+        calls:
+            - ['setOptions', ['$url_handler.mailto.options;ez_platform_link_manager$']]
         tags:
             - { name: url_checker, scheme: mailto }
