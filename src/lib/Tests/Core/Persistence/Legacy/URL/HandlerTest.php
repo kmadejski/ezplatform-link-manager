@@ -9,7 +9,6 @@ use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Gateway;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Handler;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Mapper;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
-use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 use PHPUnit\Framework\TestCase;
 
@@ -36,27 +35,6 @@ class HandlerTest extends TestCase
         $this->gateway = $this->createMock(Gateway::class);
         $this->mapper = $this->createMock(Mapper::class);
         $this->handler = new Handler($this->gateway, $this->mapper);
-    }
-
-    public function testCreateUrl()
-    {
-        $urlCreateStruct = new URLCreateStruct();
-
-        $url = $this->getUrl(1, 'http://ez.no');
-
-        $this->mapper
-            ->expects($this->once())
-            ->method('createURLFromCreateStruct')
-            ->with($urlCreateStruct)
-            ->willReturn($url);
-
-        $this->gateway
-            ->expects($this->once())
-            ->method('insertUrl')
-            ->with($url)
-            ->willReturn($url->id);
-
-        $this->assertEquals($url, $this->handler->createUrl($urlCreateStruct));
     }
 
     public function testUpdateUrl()

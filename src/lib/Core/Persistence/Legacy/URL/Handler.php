@@ -4,7 +4,6 @@ namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL;
 
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as HandlerInterface;
-use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
@@ -26,19 +25,6 @@ class Handler implements HandlerInterface
     {
         $this->urlGateway = $gateway;
         $this->urlMapper = $mapper;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createUrl(URLCreateStruct $urlCreateStruct)
-    {
-        $url = $this->urlMapper->createURLFromCreateStruct(
-            $urlCreateStruct
-        );
-        $url->id = $this->urlGateway->insertUrl($url);
-
-        return $url;
     }
 
     /**

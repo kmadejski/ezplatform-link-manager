@@ -8,7 +8,6 @@ use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
-use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 use PHPUnit\Framework\TestCase;
 use Stash\Interfaces\ItemInterface;
@@ -42,19 +41,6 @@ class URLHandlerTest extends TestCase
         $this->persistenceHandler = $this->createMock(Handler::class);
         $this->logger = $this->createMock(PersistenceLogger::class);
         $this->urlHandler = new URLHandler($this->cache, $this->persistenceHandler, $this->logger);
-    }
-
-    public function testCreateUrl()
-    {
-        $urlCreateStruct = new URLCreateStruct();
-
-        $this->logger
-            ->expects($this->once())
-            ->method('logCall')
-            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::createUrl',
-                ['struct' => $urlCreateStruct]);
-
-        $this->urlHandler->createUrl($urlCreateStruct);
     }
 
     public function testUpdateUrl()

@@ -6,7 +6,6 @@ use eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use EzSystems\EzPlatformLinkManager\API\Repository\Values\URLQuery;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\Handler as URLHandlerInterface;
-use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 
 /**
@@ -46,18 +45,6 @@ class URLHandler implements URLHandlerInterface
         $this->cache = $cache;
         $this->persistenceHandler = $persistenceHandler;
         $this->logger = $logger;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createUrl(URLCreateStruct $struct)
-    {
-        $this->logger->logCall(__METHOD__, [
-            'struct' => $struct,
-        ]);
-
-        return $this->persistenceHandler->createUrl($struct);
     }
 
     /**

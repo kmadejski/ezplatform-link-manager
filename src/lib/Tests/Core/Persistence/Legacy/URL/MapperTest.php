@@ -4,7 +4,6 @@ namespace EzSystems\EzPlatformLinkManager\Tests\Core\Persistence\Legacy\URL;
 
 use EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL\Mapper;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
-use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 use PHPUnit\Framework\TestCase;
 
@@ -19,25 +18,6 @@ class MapperTest extends TestCase
     {
         parent::setUp();
         $this->mapper = new Mapper();
-    }
-
-    public function testCreateURLFromCreateStruct()
-    {
-        $urlCreateStruct = new URLCreateStruct();
-        $urlCreateStruct->url = 'http://ez.no';
-        $urlCreateStruct->isValid = true;
-        $urlCreateStruct->lastChecked = 0;
-        $urlCreateStruct->modified = time();
-
-        $expected = new URL();
-        $expected->url = $urlCreateStruct->url;
-        $expected->originalUrlMd5 = md5($urlCreateStruct->url);
-        $expected->isValid = $urlCreateStruct->isValid;
-        $expected->lastChecked = $urlCreateStruct->lastChecked;
-        $expected->created = $urlCreateStruct->modified;
-        $expected->modified = $urlCreateStruct->modified;
-
-        $this->assertEquals($expected, $this->mapper->createURLFromCreateStruct($urlCreateStruct));
     }
 
     public function testCreateURLFromUpdateStruct()

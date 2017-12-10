@@ -3,7 +3,6 @@
 namespace EzSystems\EzPlatformLinkManager\Core\Persistence\Legacy\URL;
 
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
-use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct;
 use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 
 /**
@@ -12,30 +11,9 @@ use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct;
 class Mapper
 {
     /**
-     * Creates a URL from the given create $struct.
-     *
-     * @param \EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct $struct
-     * @return \EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL
-     */
-    public function createURLFromCreateStruct(URLCreateStruct $struct)
-    {
-        $time = time();
-
-        $url = new URL();
-        $url->url = $struct->url;
-        $url->originalUrlMd5 = md5($struct->url);
-        $url->isValid = $struct->isValid;
-        $url->lastChecked = $struct->lastChecked;
-        $url->created = $time;
-        $url->modified = $time;
-
-        return $url;
-    }
-
-    /**
      * Creates a URL from the given update $struct.
      *
-     * @param \EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLCreateStruct $struct
+     * @param \EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URLUpdateStruct $struct
      * @return \EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL
      */
     public function createURLFromUpdateStruct(URLUpdateStruct $struct)
