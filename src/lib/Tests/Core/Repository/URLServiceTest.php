@@ -335,7 +335,7 @@ class URLServiceTest extends TestCase
 
         $this->urlHandler
             ->expects($this->once())
-            ->method('getRelatedContentIds')
+            ->method('findUsages')
             ->with($url->id)
             ->willReturn($usages);
 

@@ -105,14 +105,14 @@ class URLHandler implements URLHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function getRelatedContentIds($id)
+    public function findUsages($id)
     {
         $cache = $this->cache->getItem('url', $id, 'usages');
 
         $usages = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, ['url' => $id]);
-            $usages = $this->persistenceHandler->getRelatedContentIds($id);
+            $usages = $this->persistenceHandler->findUsages($id);
             $cache->set($usages)->save();
         }
 

@@ -141,7 +141,7 @@ class URLService implements URLServiceInterface
      */
     public function findUsages(URL $url, $offset = 0, $limit = -1)
     {
-        $usages = $this->urlHandler->getRelatedContentIds($url->id);
+        $usages = $this->urlHandler->findUsages($url->id);
 
         $query = new Query();
         if (!empty($usages)) {

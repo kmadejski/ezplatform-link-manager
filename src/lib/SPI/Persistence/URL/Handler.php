@@ -27,6 +27,14 @@ interface Handler
     public function find(URLQuery $query);
 
     /**
+     * Returns IDs of Content Objects using URL identified by $id.
+     *
+     * @param int $id
+     * @return array
+     */
+    public function findUsages($id);
+
+    /**
      * Loads the data for the URL identified by $id.
      *
      * @param int $id
@@ -45,12 +53,4 @@ interface Handler
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function loadByUrl($url);
-
-    /**
-     * Returns IDs of Content Objects using URL identified by $id.
-     *
-     * @param int $id
-     * @return array
-     */
-    public function getRelatedContentIds($id);
 }

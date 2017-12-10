@@ -190,7 +190,7 @@ class HandlerTest extends TestCase
             ->with($url->id)
             ->will($this->returnValue($ids));
 
-        $this->assertEquals($ids, $this->handler->getRelatedContentIds($url->id));
+        $this->assertEquals($ids, $this->handler->findUsages($url->id));
     }
 
     private function getUrl($id = 1, $urlAddr = 'http://ez.no')

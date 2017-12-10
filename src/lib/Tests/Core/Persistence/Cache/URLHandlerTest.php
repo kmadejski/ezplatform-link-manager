@@ -165,7 +165,7 @@ class URLHandlerTest extends TestCase
         $this->assertEquals($url, $this->urlHandler->loadById($url->id));
     }
 
-    public function testGetRelatedContentIdsWithCache()
+    public function testFindUsagesWithCache()
     {
         $url = $this->getUrl();
         $usages = [1, 2, 3];
@@ -188,10 +188,10 @@ class URLHandlerTest extends TestCase
             ->method('isMiss')
             ->will($this->returnValue(false));
 
-        $this->assertEquals($usages, $this->urlHandler->getRelatedContentIds($url->id));
+        $this->assertEquals($usages, $this->urlHandler->findUsages($url->id));
     }
 
-    public function testGetRelatedContentIdsWithoutCache()
+    public function testFindUsagesWithoutCache()
     {
         $url = $this->getUrl();
         $usages = [1, 2, 3];
@@ -217,13 +217,13 @@ class URLHandlerTest extends TestCase
         $this->logger
             ->expects($this->once())
             ->method('logCall')
-            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::getRelatedContentIds',
+            ->with('EzSystems\EzPlatformLinkManager\Core\Persistence\Cache\URLHandler::findUsages',
                 [
                     'url' => $url->id,
                 ]);
         $this->persistenceHandler
             ->expects($this->once())
-            ->method('getRelatedContentIds')
+            ->method('findUsages')
             ->with($url->id)
             ->will($this->returnValue($usages));
 
@@ -239,7 +239,7 @@ class URLHandlerTest extends TestCase
             ->with()
             ->will($this->returnSelf());
 
-        $this->assertEquals($usages, $this->urlHandler->getRelatedContentIds($url->id));
+        $this->assertEquals($usages, $this->urlHandler->findUsages($url->id));
     }
 
     private function getUrl()

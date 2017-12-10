@@ -95,7 +95,7 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function getRelatedContentIds($id)
+    public function findUsages($id)
     {
         $ids = $this->urlGateway->getRelatedContentIds($id);
 
