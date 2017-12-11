@@ -23,7 +23,6 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
 
     public function testRegisterCriteriaConverter()
     {
-        $criteriaConverter = 'criteria_converter';
         $serviceId = 'service_id';
         $definition = new Definition();
         $definition->addTag('ezpublish.legacy.gateway.criterion_handler.url');
