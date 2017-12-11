@@ -18,7 +18,8 @@
     "twig/extensions": "~1.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.4"
+    "phpunit/phpunit": "^5.7",
+    "matthiasnoback/symfony-dependency-injection-test": "~1.0"
   },
   "autoload": {
     "psr-4": {
