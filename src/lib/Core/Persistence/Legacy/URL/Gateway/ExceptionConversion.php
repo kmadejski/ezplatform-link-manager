@@ -31,20 +31,6 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function insertUrl(URL $url)
-    {
-        try {
-            return $this->innerGateway->insertUrl($url);
-        } catch (DBALException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        } catch (PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function updateUrl(URL $url)
     {
         try {

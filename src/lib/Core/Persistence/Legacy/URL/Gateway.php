@@ -7,8 +7,6 @@ use EzSystems\EzPlatformLinkManager\SPI\Persistence\URL\URL;
 
 abstract class Gateway
 {
-    abstract public function insertUrl(URL $url);
-
     abstract public function updateUrl(URL $url);
 
     abstract public function find(Criterion $criterion, $offset, $limit, array $sortClauses = [], $doCount = true);

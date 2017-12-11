@@ -144,35 +144,6 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function insertUrl(URL $url)
-    {
-        $query = $this->handler->createInsertQuery();
-        $query->insertInto(
-            $this->handler->quoteTable(self::URL_TABLE)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_URL),
-            $query->bindValue($url->url)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_ORIGINAL_URL_MD5),
-            $query->bindValue($url->originalUrlMd5)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_CREATED),
-            $query->bindValue($url->created, null, PDO::PARAM_INT)
-        )->set(
-            $this->handler->quoteColumn(self::COLUMN_MODIFIED),
-            $query->bindValue($url->modified, null, PDO::PARAM_INT)
-        );
-
-        $query->prepare()->execute();
-
-        return $this->handler->lastInsertId(
-            $this->handler->getSequenceName(self::URL_TABLE, 'id')
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function updateUrl(URL $url)
     {
         $query = $this->handler->createUpdateQuery();
